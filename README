@@ -2,8 +2,6 @@ Goals:
 
 a simple tetris game with:
 
-- fixed framerate/frame count base timing
-
 - fixed resolution
 
 - OpenGL graphics/SDL input and windowing

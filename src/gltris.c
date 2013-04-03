@@ -40,13 +40,7 @@ int gltris_init(void)
 
 void gltris_loop()
 {
-	uint32_t pticks, nticks;
-	int framecount;
-	uint32_t sec_ticks;
-
 	g_running = true;
-	sec_ticks = pticks = SDL_GetTicks();
-	framecount = 0;
 
 	g_second_timer = add_timer(1000, NULL);
 
@@ -55,15 +49,6 @@ void gltris_loop()
 	{
                 /* timer.c: Update all the timers and call the appropriate callbacks */
 		do_timers();
-
-		if(framecount == NUMFPS){ /* If we've reached the frame count limit for this frame */
-			framecount = 0; /* reset the counter */
-			nticks = SDL_GetTicks() - pticks; /* then get the time elapsed since the last time the limit was reached... */
-			if(nticks < 1000){ /* ...and if the time is less than a second (1000 ms)... */
-				SDL_Delay(1000 - nticks); /* ...sleep the remainder */
-			}
-			pticks = SDL_GetTicks(); /* Store the current time so we can do this again */
-		}
 
 		/* block.c: tests for collisions */
 		do_collisions();
@@ -82,8 +67,6 @@ void gltris_loop()
 
 		/* graphics.c: swaps buffers, etc */
 		graphics_end_frame();
-		
-		framecount++;
 	}
 }
 
