@@ -70,31 +70,42 @@ void set_pieces(void)
 }
 
 /* Checks for vertical collisions one block below the blocks in the player piece, returns true if there aren't any */
-bool do_vcollisions(void)
+collision_t do_collisions(void)
 {
 	int i, j;
+	collision_t r = NO_COLLISION;
 	for(i = 0; i < GRIDSZX; i++)
 	{
 		for(j = 0; j < GRIDSZY; j++)
 		{
 			if(g_blockgrid[i][j] > 0){
-				if((j > 0) && (g_blockgrid[i][j-1] >= 0)){
-					continue;
-				} else {
-					return false;
+				if((j != 0) && g_blockgrid[i][j-1] < 0){
+					r |= COLLISION_BELOW;
 				}
+				
+				if((i == 0) || /* If we're going to hit the left wall */
+				   ((i != 0) && (g_blockgrid[i-1][j] < 0))){ /* Or going to hit a block to the left */
+					r |= COLLISION_LEFT;
+				}
+
+				if((i == (GRIDSZX-1)) || /* If we're going to hit the right wall */
+				   ((i != (GRIDSZX+1)) && (g_blockgrid[i+1][j] < 0))){ /* Or going to hit a block to the right */
+					r |= COLLISION_RIGHT;
+				}
+					 
 			}
 		}
 	}
 
-	return true;
-		
+	return r;		
 }
+
+
 
 void do_gravity(void)
 {
 	if(g_second_timer->elapsed == true){/* If this frame falls on a second mark and there haven't been any collisions between the piece and a block/the ground */
-		if(do_vcollisions() == true){/* If it's safe to move the piece down */
+		if(!(do_collisions() & COLLISION_BELOW)){/* If it's safe to move the piece down */
 			unsigned int i, j;
 			for(i = 0; i < GRIDSZX; i++)
 			{
