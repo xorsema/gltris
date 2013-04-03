@@ -122,7 +122,7 @@ void do_collisions(void)
 				}
 
 				if((i == (GRIDSZX-1)) || /* If we're going to hit the right wall */
-				   ((i != (GRIDSZX+1)) && (g_blockgrid[i+1][j] < 0))){ /* Or going to hit a block to the right */
+				   ((i != (GRIDSZX-1)) && (g_blockgrid[i+1][j] < 0))){ /* Or going to hit a block to the right */
 					r |= COLLISION_RIGHT;
 				}
 					 
