@@ -65,6 +65,9 @@ void gltris_loop()
 			pticks = SDL_GetTicks(); /* Store the current time so we can do this again */
 		}
 
+		/* block.c: tests for collisions */
+		do_collisions();
+
 		/* input.c: handles keyboard etc */
 		handle_input();
 		

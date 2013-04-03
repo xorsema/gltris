@@ -6,6 +6,8 @@
 #include "block.h"
 #include "timer.h"
 
+collision_t g_player_collisions;
+
 const int g_piece_blocks[] = {
         /* NULL */        
 	0, 0,
@@ -43,8 +45,8 @@ void offset_block(int x, int y, int xoff, int yoff)
 	nx = x + xoff;
 	ny = y + yoff;
 	
-	if(nx < 0 || ny < 0 || nx > GRIDSZX || ny > GRIDSZY)
-		return;
+//	if(nx < 0 || ny < 0 || nx > GRIDSZX || ny > GRIDSZY)
+//		return;
 
 	o = &g_blockgrid[x][y];
 	n = &g_blockgrid[nx][ny];
@@ -52,6 +54,37 @@ void offset_block(int x, int y, int xoff, int yoff)
 	*n = *o;
 	*o = 0;
 }
+
+/* Move the player's block to the right by a specified amount */
+void offset_player_right(unsigned int amt)
+{
+	int i, j;
+	for(i = GRIDSZX - 1; i != 0; i--)/* Start from the right so we don't overwrite our own piece */
+	{
+		for(j = 0; j < GRIDSZY; j++)
+		{
+			if(g_blockgrid[i][j] > 0){
+				offset_block(i, j, amt, 0);
+			}
+		}
+	}
+}
+
+/* Move the player's block to the left by a specified amount */
+void offset_player_left(unsigned int amt)
+{
+	int i, j;
+	for(i = 0; i < GRIDSZX; i++)
+	{
+		for(j = 0; j < GRIDSZY; j++)
+		{
+			if(g_blockgrid[i][j] > 0){
+				offset_block(i, j, -(amt), 0);
+			}
+		}
+	}
+}
+
 
 /* Sets the player pieces, making them negative so they are effectively "placed" */
 void set_pieces(void)
@@ -69,8 +102,8 @@ void set_pieces(void)
 	}
 }
 
-/* Checks for vertical collisions one block below the blocks in the player piece, returns true if there aren't any */
-collision_t do_collisions(void)
+/* Check for collisions between the player piece and the wall/floor/other blocks, store the result in g_player_collisions */
+void do_collisions(void)
 {
 	int i, j;
 	collision_t r = NO_COLLISION;
@@ -79,7 +112,7 @@ collision_t do_collisions(void)
 		for(j = 0; j < GRIDSZY; j++)
 		{
 			if(g_blockgrid[i][j] > 0){
-				if((j != 0) && g_blockgrid[i][j-1] < 0){
+				if((j == 0)  || (j != 0) && g_blockgrid[i][j-1] < 0){
 					r |= COLLISION_BELOW;
 				}
 				
@@ -97,15 +130,13 @@ collision_t do_collisions(void)
 		}
 	}
 
-	return r;		
+	g_player_collisions = r;		
 }
-
-
 
 void do_gravity(void)
 {
 	if(g_second_timer->elapsed == true){/* If this frame falls on a second mark and there haven't been any collisions between the piece and a block/the ground */
-		if(!(do_collisions() & COLLISION_BELOW)){/* If it's safe to move the piece down */
+		if(!(g_player_collisions & COLLISION_BELOW)){/* If it's safe to move the piece down */
 			unsigned int i, j;
 			for(i = 0; i < GRIDSZX; i++)
 			{
