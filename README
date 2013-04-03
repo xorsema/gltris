@@ -1,0 +1,23 @@
+Goals:
+
+a simple tetris game with:
+
+- fixed framerate/frame count base timing
+
+- fixed resolution
+
+- OpenGL graphics/SDL input and windowing
+
+- keyboard input
+
+- text rendering with SDL_ttf
+
+- scoring
+
+- preview of next block in side menu
+
+Notes:
+
+Collision of blocks will be done with a map of block locations in an array, everytime the block about to be placed moves down, the new location will be checked first.
+
+right portion of screen dedicated to score/next block section (side menu).  screen is 480 of blocks and 160 of side menu by width.
