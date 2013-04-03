@@ -59,7 +59,7 @@ void offset_block(int x, int y, int xoff, int yoff)
 void offset_player_right(unsigned int amt)
 {
 	int i, j;
-	for(i = GRIDSZX - 1; i != 0; i--)/* Start from the right so we don't overwrite our own piece */
+	for(i = GRIDSZX - 1; i > -1; i--)/* Start from the right so we don't overwrite our own piece */
 	{
 		for(j = 0; j < GRIDSZY; j++)
 		{
