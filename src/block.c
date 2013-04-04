@@ -8,34 +8,6 @@
 
 collision_t g_player_collisions;
 
-const int g_piece_blocks[] = {
-        /* NULL */        
-	0, 0,
-	0, 0,
-	0, 0,
-	0, 0,
-        /* I */
-	0, 0,
-	1, 0,
-	2, 0,
-	3, 0,
-	/* J */
-	0, 0,
-	1, 0,
-	2, 0,
-	2, -1,
-	/* L */
-	0, 0,
-	-1, 0,
-	1, 0,
-	2, 0,
-	/* O */
-	0, 0,
-	1, 0,
-	0, 1,
-	1, 1
-};
-
 /* Move a block by the specified offsets */
 void offset_block(int x, int y, int xoff, int yoff)
 {
@@ -84,7 +56,6 @@ void offset_player_left(unsigned int amt)
 		}
 	}
 }
-
 
 /* Sets the player pieces, making them negative so they are effectively "placed" */
 void set_pieces(void)

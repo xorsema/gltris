@@ -1,7 +1,7 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#define WWIDTH 640
+#define WWIDTH 480
 #define WHEIGHT 480
 #define NUMFPS 30
 

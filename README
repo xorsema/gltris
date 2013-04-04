@@ -18,4 +18,16 @@ Notes:
 
 Collision of blocks will be done with a map of block locations in an array, everytime the block about to be placed moves down, the new location will be checked first.
 
-right portion of screen dedicated to score/next block section (side menu).  screen is 480 of blocks and 160 of side menu by width.
+In order to confirm to the Tetris guidelines, resolution is 480x480 with the side menu filling the right portion of the screen and the game filling the left
+
+the grid is 10x22 with 2 of the 22 hidden at the top
+
+each block is therefore 24x24
+
+TODO:
+
+Rotation
+row clearance
+Side menu
+scoring
+background?

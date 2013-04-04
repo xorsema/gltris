@@ -29,11 +29,11 @@ int gltris_init(void)
 	
 	memset(g_blockgrid, 0, sizeof(g_blockgrid));
 	
-	g_blockgrid[9][19] = 1;
-	g_blockgrid[10][19] = 1;
-	g_blockgrid[9][18] = 1;
-	g_blockgrid[8][18] = 1;
-	g_blockgrid[10][0] = -1;
+	g_blockgrid[7][21] = 1;
+	g_blockgrid[6][21] = 1;
+	g_blockgrid[5][21] = 1;
+	g_blockgrid[4][21] = 1;
+	g_blockgrid[5][0] = -1;
 
 	return 0;
 }

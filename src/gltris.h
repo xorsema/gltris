@@ -2,8 +2,8 @@
 #define GLTRIS_H
 
 
-#define GRIDSZX 20
-#define GRIDSZY 28
+#define GRIDSZX 10
+#define GRIDSZY 22
 #define BLOCKSIZE 24
 
 extern bool g_running;
