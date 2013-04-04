@@ -28,13 +28,9 @@ int gltris_init(void)
 		return 1;
 	
 	memset(g_blockgrid, 0, sizeof(g_blockgrid));
-	
-	g_blockgrid[7][21] = 1;
-	g_blockgrid[6][21] = 1;
-	g_blockgrid[5][21] = 1;
-	g_blockgrid[4][21] = 1;
-	g_blockgrid[5][0] = -1;
 
+	spawn_piece(1);
+	
 	return 0;
 }
 
