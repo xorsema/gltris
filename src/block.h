@@ -1,7 +1,6 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
-void offset_block(int, int, int, int);
 void handle_blocks(void);
 void do_collisions(void);
 void spawn_piece(unsigned int);

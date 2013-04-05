@@ -22,12 +22,12 @@ void handle_input(void)
 			switch(event.key.keysym.sym)
 			{
 			case SDLK_RIGHT:
-				if(!(g_player_collisions & COLLISION_RIGHT) && (g_player.x < GRIDSZX))
+				if(!(g_player_collisions & COLLISION_RIGHT))
 					g_player.x += 1;
 				break;
 
 			case SDLK_LEFT:
-				if(!(g_player_collisions & COLLISION_LEFT) && (g_player.x > 0))
+				if(!(g_player_collisions & COLLISION_LEFT))
 					g_player.x -= 1;
 				break;
 

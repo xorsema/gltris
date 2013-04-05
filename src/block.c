@@ -61,20 +61,22 @@ const uint8_t J_piece[4][3][3] = {
 	}
 };
 
+/* Write the player piece to g_blockgrid */
 void write_player(void)
 {
 	int i, j, max;
 	int8_t t;
-	max = (g_player.type == 1 || g_player.type == 4) ? 4 : 3;/* If it's a O or I piece it will be 4x4 */
+	bool isatype = (g_player.type == I_PIECE || g_player.type == O_PIECE);/* If it's a type a piece pointer or not */
+	max = isatype ? 4 : 3;/* If it's a O or I piece it will be 4x4 */
 	for(i = 0; i < max; i++)
 	{
 		int x = i + g_player.x;
 		for(j = 0; j < max; j++)
 		{
 			int y = j + g_player.y;
-			t = (g_player.type == 1 || g_player.type == 4) ? (*g_player.piece.a)[g_player.rotation][j][i] : (*g_player.piece.b)[g_player.rotation][j][i];
-			if((t != 0) && g_blockgrid[x][y] == 0){
-				g_blockgrid[x][y] = t;
+			t = isatype ? (*g_player.piece.a)[g_player.rotation][j][i] : (*g_player.piece.b)[g_player.rotation][j][i];/* Deref the correct pointer type in the union */
+			if((t != 0) && g_blockgrid[x][y] == 0){/* If there's nothing there and we're not trying to copy a null block */
+				g_blockgrid[x][y] = t;/* Copy our block at the correct position */
 			}
 		}
 	}
@@ -92,25 +94,6 @@ void clear_player(void)
 			}
 		}
 	}
-}
-
-/* Move a block by the specified offsets */
-void offset_block(int x, int y, int xoff, int yoff)
-{
-	int nx, ny;
-	int8_t *o, *n;
-
-	nx = x + xoff;
-	ny = y + yoff;
-	
-//	if(nx < 0 || ny < 0 || nx > GRIDSZX || ny > GRIDSZY)
-//		return;
-
-	o = &g_blockgrid[x][y];
-	n = &g_blockgrid[nx][ny];
-	
-	*n = *o;
-	*o = 0;
 }
 
 /* Sets the player pieces, making them negative so they are effectively "placed" */
@@ -181,21 +164,19 @@ void handle_blocks(void)
 
 void spawn_piece(unsigned int id)
 {
+	g_player.rotation = 0;
+	g_player.type = id;
 	switch(id)
 	{
 	case I_PIECE:
 		g_player.x = 2;
 		g_player.y = 19;
 		g_player.piece.a = (uint8_t (*)[4][4][4])&I_piece;
-		g_player.rotation = 0;
-		g_player.type = id;
 		break;
 	case J_PIECE:
 		g_player.x = 2;
 		g_player.y = 19;
 		g_player.piece.b = (uint8_t (*)[4][3][3])&J_piece;
-		g_player.rotation = 0;
-		g_player.type = id;
 		break;
 	}
 }
