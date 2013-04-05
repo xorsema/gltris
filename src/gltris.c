@@ -29,7 +29,7 @@ int gltris_init(void)
 	
 	memset(g_blockgrid, 0, sizeof(g_blockgrid));
 
-	spawn_piece(1);
+	spawn_piece(S_PIECE);
 	
 	return 0;
 }

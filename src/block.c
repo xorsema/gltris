@@ -113,6 +113,75 @@ const uint8_t L_piece[4][3][3] = {
 	}
 };
 
+const uint8_t S_piece[4][3][3] = {
+	{
+		{ 0, 5, 5 },
+		{ 5, 5, 0 },
+		{ 0, 0, 0 }
+	},
+	{
+		{ 0, 5, 0 },
+		{ 0, 5, 5 },
+		{ 0, 0, 5 }
+	},
+	{
+		{ 0, 0, 0 },
+		{ 0, 5, 5 },
+		{ 5, 5, 0 }
+	},
+	{
+		{ 5, 0, 0 },
+		{ 5, 5, 0 },
+		{ 0, 5, 0 }
+	}
+};
+
+const uint8_t T_piece[4][3][3] = {
+	{
+		{ 0, 6, 0 },
+		{ 6, 6, 6 },
+		{ 0, 0, 0 }
+	},
+	{
+		{ 0, 6, 0 },
+		{ 0, 6, 6 },
+		{ 0, 6, 0 }
+	},
+	{
+		{ 0, 0, 0 },
+		{ 6, 6, 6 },
+		{ 0, 6, 0 }
+	},
+	{
+		{ 0, 6, 0 },
+		{ 6, 6, 0 },
+		{ 0, 6, 0 }
+	}
+};
+
+const uint8_t Z_piece[4][3][3] = {
+	{
+		{ 7, 7, 0 },
+		{ 0, 7, 7 },
+		{ 0, 0, 0 }
+	},
+	{
+		{ 0, 0, 7 },
+		{ 0, 7, 7 },
+		{ 0, 7, 0 }
+	},
+	{
+		{ 0, 0, 0 },
+		{ 7, 7, 0 },
+		{ 0, 7, 7 }
+	},
+	{
+		{ 0, 7, 0 },
+		{ 7, 7, 0 },
+		{ 7, 0, 0 }
+	}
+};
+
 /* Write the player piece to g_blockgrid */
 void write_player(void)
 {
@@ -225,10 +294,35 @@ void spawn_piece(unsigned int id)
 		g_player.y = 19;
 		g_player.piece.a = (uint8_t (*)[4][4][4])&I_piece;
 		break;
+	case O_PIECE:
+		g_player.x = 2;
+		g_player.y = 19;
+		g_player.piece.a = (uint8_t (*)[4][4][4])&O_piece;
+		break;
 	case J_PIECE:
 		g_player.x = 2;
 		g_player.y = 19;
 		g_player.piece.b = (uint8_t (*)[4][3][3])&J_piece;
+		break;
+	case L_PIECE:
+		g_player.x = 2;
+		g_player.y = 19;
+		g_player.piece.b = (uint8_t (*)[4][3][3])&L_piece;
+		break;
+	case S_PIECE:
+		g_player.x = 2;
+		g_player.y = 19;
+		g_player.piece.b = (uint8_t (*)[4][3][3])&S_piece;
+		break;
+	case T_PIECE:
+		g_player.x = 2;
+		g_player.y = 19;
+		g_player.piece.b = (uint8_t (*)[4][3][3])&T_piece;
+		break;
+	case Z_PIECE:
+		g_player.x = 2;
+		g_player.y = 19;
+		g_player.piece.b = (uint8_t (*)[4][3][3])&Z_piece;
 		break;
 	}
 }
