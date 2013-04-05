@@ -88,18 +88,10 @@ void graphics_render_blockgrid(void)
 	{
 		for(j = 0; j < GRIDSZY; j++)
 		{
-			if((b = g_blockgrid[i][j]) != 0)
-			{
+			if((b = g_blockgrid[i][j]) != 0){
 				graphics_render_block(i, j, &g_piece_colors[abs(b)*3]); /* abs() because we don't want negatives to deref the color */
 			}
 		}
 		
 	}
-}
-
-/* Rotate a point about the origin (0, 0) */
-void do_rotation(float inx, float iny, float *outx, float *outy, float r)
-{
-	*outx = cos(r) * inx + -(sin(r)) + iny;
-	*outy = sin(r) * inx + cos(r) * iny;
 }
