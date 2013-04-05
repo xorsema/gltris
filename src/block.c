@@ -75,11 +75,7 @@ void write_player(void)
 			t = (g_player.type == 1 || g_player.type == 4) ? (*g_player.piece.a)[g_player.rotation][j][i] : (*g_player.piece.b)[g_player.rotation][j][i];
 			if((t != 0) && g_blockgrid[x][y] == 0){
 				g_blockgrid[x][y] = t;
-			} else if((t == 0) && g_blockgrid[x][y] != 0){
-				continue;
 			}
-
-		     
 		}
 	}
 }

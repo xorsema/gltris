@@ -30,6 +30,10 @@ void handle_input(void)
 				if(!(g_player_collisions & COLLISION_LEFT) && (g_player.x > 0))
 					g_player.x -= 1;
 				break;
+
+			case SDLK_SPACE:
+				g_player.rotation = g_player.rotation != 3 ? g_player.rotation + 1 : 0;
+				break;
 			}
 		}
 	}
