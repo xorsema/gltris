@@ -4,8 +4,6 @@
 void offset_block(int, int, int, int);
 void handle_blocks(void);
 void do_collisions(void);
-void offset_player_left(unsigned int);
-void offset_player_right(unsigned int);
 void spawn_piece(unsigned int);
 extern const int g_piece_blocks[];
 
@@ -16,6 +14,18 @@ typedef enum collision
 	COLLISION_LEFT = 2,
 	COLLISION_RIGHT = 4
 } collision_t;
+
+enum 
+{
+	NULL_PIECE = 0,
+	I_PIECE = 1,
+	J_PIECE = 2,
+	L_PIECE = 3,
+	O_PIECE = 4,
+	S_PIECE = 5,
+	T_PIECE = 6,
+	Z_PIECE = 7
+};
 
 typedef union piece_ptr
 {

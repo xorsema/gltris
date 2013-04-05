@@ -73,11 +73,13 @@ void write_player(void)
 		{
 			int y = j + g_player.y;
 			t = (g_player.type == 1 || g_player.type == 4) ? (*g_player.piece.a)[g_player.rotation][j][i] : (*g_player.piece.b)[g_player.rotation][j][i];
-			if((t != 0) && (g_blockgrid[x][y] != 0)){
-				return;
-			} else {
+			if((t != 0) && g_blockgrid[x][y] == 0){
 				g_blockgrid[x][y] = t;
+			} else if((t == 0) && g_blockgrid[x][y] != 0){
+				continue;
 			}
+
+		     
 		}
 	}
 }
@@ -113,36 +115,6 @@ void offset_block(int x, int y, int xoff, int yoff)
 	
 	*n = *o;
 	*o = 0;
-}
-
-/* Move the player's block to the right by a specified amount */
-void offset_player_right(unsigned int amt)
-{
-	int i, j;
-	for(i = GRIDSZX - 1; i > -1; i--)/* Start from the right so we don't overwrite our own piece */
-	{
-		for(j = 0; j < GRIDSZY; j++)
-		{
-			if(g_blockgrid[i][j] > 0){
-				offset_block(i, j, amt, 0);
-			}
-		}
-	}
-}
-
-/* Move the player's block to the left by a specified amount */
-void offset_player_left(unsigned int amt)
-{
-	int i, j;
-	for(i = 0; i < GRIDSZX; i++)
-	{
-		for(j = 0; j < GRIDSZY; j++)
-		{
-			if(g_blockgrid[i][j] > 0){
-				offset_block(i, j, -(amt), 0);
-			}
-		}
-	}
 }
 
 /* Sets the player pieces, making them negative so they are effectively "placed" */
@@ -196,9 +168,10 @@ void do_gravity(void)
 {
 	if(g_second_timer->elapsed == true){/* If this frame falls on a second mark and there haven't been any collisions between the piece and a block/the ground */
 		if(!(g_player_collisions & COLLISION_BELOW)){/* If it's safe to move the piece down */
-			g_player.y -= 1;;
+			g_player.y -= 1;
 		} else {
 			set_pieces();/* "set" the piece's blocks (make them negative) so they aren't counted as a piece anymore */
+			spawn_piece(2);
 		}
 	}
 }
@@ -214,19 +187,19 @@ void spawn_piece(unsigned int id)
 {
 	switch(id)
 	{
-	case 1:
+	case I_PIECE:
 		g_player.x = 2;
 		g_player.y = 19;
 		g_player.piece.a = (uint8_t (*)[4][4][4])&I_piece;
 		g_player.rotation = 0;
-		g_player.type = 1;
+		g_player.type = id;
 		break;
-	case 2:
+	case J_PIECE:
 		g_player.x = 2;
 		g_player.y = 19;
 		g_player.piece.b = (uint8_t (*)[4][3][3])&J_piece;
 		g_player.rotation = 0;
-		g_player.type = 2;
+		g_player.type = id;
 		break;
 	}
 }

@@ -17,7 +17,7 @@ const uint8_t g_piece_colors[] = {
 	255, 0, 255,   // magenta(2) J
 	255, 255, 0,   // yellow(3) L
 	0, 255, 255,   // cyan(4) O
-	0, 0, 255,     // blue(5)
+	0, 0, 255,     // blue(5) S
 	192, 192, 192, // light grey(6) T
 	0, 255, 0      // green(7) Z
 };
