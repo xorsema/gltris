@@ -182,6 +182,25 @@ const uint8_t Z_piece[4][3][3] = {
 	}
 };
 
+/* This basically implements wall kicks */
+bool fix_bounds(int x, int y)
+{
+	if(x < 0){
+		g_player.x += abs(x);
+		return true;
+	}
+	if(x > (GRIDSZX - 1)){
+		g_player.x -= x - (GRIDSZX - 1);
+		return true;
+	}
+	if(y < 0){
+		g_player.y += abs(y);
+		return true;
+	}
+		
+		return false;
+}
+
 /* Write the player piece to g_blockgrid */
 void write_player(void)
 {
@@ -196,6 +215,15 @@ void write_player(void)
 		{
 			int y = j + g_player.y;
 			t = isatype ? (*g_player.piece.a)[g_player.rotation][j][i] : (*g_player.piece.b)[g_player.rotation][j][i];/* Deref the correct pointer type in the union */
+
+			/* if this isn't a null block and it's outside the range, fix_bounds will return true, so we should redo the writing of our piece */
+			if((t != 0) && (fix_bounds(x, y) == true)){
+				clear_player();
+				write_player();
+				return;
+			}
+
+
 			if((t != 0) && g_blockgrid[x][y] == 0){/* If there's nothing there and we're not trying to copy a null block */
 				g_blockgrid[x][y] = t;/* Copy our block at the correct position */
 			}

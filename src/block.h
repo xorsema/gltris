@@ -4,6 +4,7 @@
 void handle_blocks(void);
 void do_collisions(void);
 void spawn_piece(unsigned int);
+void clear_player(void);
 extern const int g_piece_blocks[];
 
 typedef enum collision

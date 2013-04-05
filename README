@@ -18,7 +18,7 @@ Notes:
 
 Collision of blocks will be done with a map of block locations in an array, everytime the block about to be placed moves down, the new location will be checked first.
 
-In order to confirm to the Tetris guidelines, resolution is 480x480 with the side menu filling the right portion of the screen and the game filling the left
+In order to conform to the Tetris guidelines, resolution is 480x480 with the side menu filling the right portion of the screen and the game filling the left
 
 the grid is 10x22 with 2 of the 22 hidden at the top
 
@@ -27,7 +27,7 @@ each block is therefore 24x24
 TODO:
 
 Rotation - DONE!
-Wall kicks
+Wall kicks - DONE!
 row clearance
 Side menu
 scoring
