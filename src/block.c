@@ -287,41 +287,29 @@ void spawn_piece(unsigned int id)
 {
 	g_player.rotation = 0;
 	g_player.type = id;
+	g_player.x = 2;
+	g_player.y = 20;
 	switch(id)
 	{
 	case I_PIECE:
-		g_player.x = 2;
-		g_player.y = 19;
 		g_player.piece.a = (uint8_t (*)[4][4][4])&I_piece;
 		break;
 	case O_PIECE:
-		g_player.x = 2;
-		g_player.y = 19;
 		g_player.piece.a = (uint8_t (*)[4][4][4])&O_piece;
 		break;
 	case J_PIECE:
-		g_player.x = 2;
-		g_player.y = 19;
 		g_player.piece.b = (uint8_t (*)[4][3][3])&J_piece;
 		break;
 	case L_PIECE:
-		g_player.x = 2;
-		g_player.y = 19;
 		g_player.piece.b = (uint8_t (*)[4][3][3])&L_piece;
 		break;
 	case S_PIECE:
-		g_player.x = 2;
-		g_player.y = 19;
 		g_player.piece.b = (uint8_t (*)[4][3][3])&S_piece;
 		break;
 	case T_PIECE:
-		g_player.x = 2;
-		g_player.y = 19;
 		g_player.piece.b = (uint8_t (*)[4][3][3])&T_piece;
 		break;
 	case Z_PIECE:
-		g_player.x = 2;
-		g_player.y = 19;
 		g_player.piece.b = (uint8_t (*)[4][3][3])&Z_piece;
 		break;
 	}
