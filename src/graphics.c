@@ -6,6 +6,7 @@
 #include <GL/glu.h>
 
 #include "graphics.h"
+#include "block.h"
 #include "gltris.h"
 
 SDL_Surface* g_display;
@@ -76,6 +77,24 @@ void graphics_render_block(int x, int y, const uint8_t* color)
 	glEnd();
 
 	glPopMatrix(); /* Restore the matrix we saved previously */
+}
+
+/* Render the player piece, which is separate from other pieces already placed */
+void graphics_render_player(void)
+{
+	int i, j;
+	uint8_t b;
+	for(i = 0; i < PBLOCKMAX; i++)
+	{
+		for(j = 0; j < PBLOCKMAX; j++)
+		{
+			b = get_player_block(i, j);
+			if(b != 0){
+				graphics_render_block(i+g_player.x, j+g_player.y, &g_piece_colors[b*3]);
+			}
+		}
+	}
+
 }
 
 /* Render our grid of blocks, using the piece colors array */

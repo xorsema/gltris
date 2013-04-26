@@ -47,7 +47,7 @@ void gltris_loop()
 		do_timers();
 
 		/* block.c: tests for collisions */
-		do_collisions();
+//		do_collisions();
 
 		/* input.c: handles keyboard etc */
 		handle_input();

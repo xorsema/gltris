@@ -19,22 +19,26 @@ void handle_input(void)
 			break;
 
 		case SDL_KEYDOWN:
-			switch(event.key.keysym.sym)
-			{
-			case SDLK_RIGHT:
-				if(!(g_player_collisions & COLLISION_RIGHT))
-					g_player.x += 1;
-				break;
-
-			case SDLK_LEFT:
-				if(!(g_player_collisions & COLLISION_LEFT))
-					g_player.x -= 1;
-				break;
-
-			case SDLK_SPACE:
-				g_player.rotation = g_player.rotation != 3 ? g_player.rotation + 1 : 0;
-				break;
+			if(g_player.type != NULL_PIECE){
+				switch(event.key.keysym.sym)
+				{
+				case SDLK_RIGHT:
+					if(check_collisions(g_player.x+1, g_player.y, g_player.rotation) == NO_COLLISION)
+						g_player.x += 1;
+					break;
+					
+				case SDLK_LEFT:
+					if(check_collisions(g_player.x-1, g_player.y, g_player.rotation) == NO_COLLISION)
+						g_player.x -= 1;
+					break;
+					
+				case SDLK_SPACE:
+					g_player.rotation = g_player.rotation != 3 ? g_player.rotation + 1 : 0;
+					do_wallkicks();
+					break;
+				}
 			}
 		}
+		
 	}
 }
