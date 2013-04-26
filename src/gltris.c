@@ -58,6 +58,8 @@ void gltris_loop()
                 /* graphics.c: sets up proper rendering context for this frame */
 		graphics_begin_frame();
 
+		graphics_render_player();
+
                 /* graphics.c: renders the blocks */
 		graphics_render_blockgrid();
 

@@ -12,6 +12,7 @@ void graphics_begin_frame(void);
 void graphics_end_frame(void);
 void graphics_render_block(int, int, const uint8_t*);
 void graphics_render_blockgrid(void);
+void graphics_render_player(void);
 void do_rotation(float, float, float *, float *, float);
 
 typedef uint8_t rgb_t[3];

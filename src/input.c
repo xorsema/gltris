@@ -23,18 +23,15 @@ void handle_input(void)
 				switch(event.key.keysym.sym)
 				{
 				case SDLK_RIGHT:
-					if(check_collisions(g_player.x+1, g_player.y, g_player.rotation) == NO_COLLISION)
-						g_player.x += 1;
+					g_player.move = RIGHT;
 					break;
 					
 				case SDLK_LEFT:
-					if(check_collisions(g_player.x-1, g_player.y, g_player.rotation) == NO_COLLISION)
-						g_player.x -= 1;
+					g_player.move = LEFT;
 					break;
 					
 				case SDLK_SPACE:
 					g_player.rotation = g_player.rotation != 3 ? g_player.rotation + 1 : 0;
-					do_wallkicks();
 					break;
 				}
 			}

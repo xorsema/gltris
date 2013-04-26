@@ -82,6 +82,9 @@ void graphics_render_block(int x, int y, const uint8_t* color)
 /* Render the player piece, which is separate from other pieces already placed */
 void graphics_render_player(void)
 {
+	if(g_player.type == NULL_PIECE)
+		return;
+
 	int i, j;
 	uint8_t b;
 	for(i = 0; i < PBLOCKMAX; i++)

@@ -33,6 +33,13 @@ enum
 	Z_PIECE	   = 7
 };
 
+enum
+{
+	NONE  = 0,
+	LEFT  = 1,
+	RIGHT = 2
+};
+
 typedef union piece_ptr
 {
 	uint8_t (*a)[4][4][4];
@@ -46,6 +53,7 @@ typedef struct player_info
 	unsigned int	type;	/* The type id of the player's piece */
 	bool		set;	/* true when the piece shouldn't move any more */
 	piece_ptr_t	piece;
+	int move; /* Should we attempt to move left or right? */
 } player_info_t;
 
 extern player_info_t g_player;

@@ -204,8 +204,7 @@ int check_collisions(int inx, int iny, unsigned int inrot)
 		for(j = 0; j < max; j++)
 		{
 			y = j + iny;
-			
-			
+						
 			b = (isatype) ? (*g_player.piece.a)[inrot][j][i] : (*g_player.piece.b)[inrot][j][i];
 			if(b == 0)/* Don't bother checking when it's null block */
 				continue;
@@ -232,114 +231,44 @@ int check_collisions(int inx, int iny, unsigned int inrot)
 	return r;
 }
 
-void do_wallkicks(void)
-{
-	int c;
-
-	while((c = check_collisions(g_player.x, g_player.y, g_player.rotation)) != NO_COLLISION && c != COLLISION_FLOOR)
-	{
-		if(c == COLLISION_BLOCK){
-			break;
-		}
-		if(c & COLLISION_LWALL){
-			g_player.x++;
-		}
-		if(c & COLLISION_RWALL){
-			g_player.x--;
-		}
-	}
-	if(c == COLLISION_FLOOR){
-		g_player.y += abs(0 - g_player.y);
-	}
-}
-
-
-
-/* TODO: rewrite this so it can check a given rotation against placed blocks as well */
-/* This basically implements wall kicks */
-bool fix_bounds(int x, int y)
-{
-	if(x < 0){
-		g_player.x += abs(x);
-		return true;
-	}
-	if(x > (GRIDSZX - 1)){
-		g_player.x -= x - (GRIDSZX - 1);
-		return true;
-	}
-	if(y < 0){
-		g_player.y += abs(y);
-		return true;
-	}
-		
-		return false;
-}
-
-/* Write the player piece to g_blockgrid */
-void write_player(void)
-{
-	int i, j, max;
-	int8_t t;
-	bool isatype = (g_player.type == I_PIECE || g_player.type == O_PIECE);/* If it's a type a piece pointer or not */
-	max = isatype ? 4 : 3;/* If it's a O or I piece it will be 4x4 */
-	for(i = 0; i < max; i++)
-	{
-		int x = i + g_player.x;
-		for(j = 0; j < max; j++)
-		{
-			int y = j + g_player.y;
-			t = isatype ? (*g_player.piece.a)[g_player.rotation][j][i] : (*g_player.piece.b)[g_player.rotation][j][i];/* Deref the correct pointer type in the union */
-			g_blockgrid[x][y] = t;
-		}
-	}
-}
-
-void clear_player(void)
-{
-	int i, j;
-	for(i = 0; i < GRIDSZX; i++)
-	{
-		for(j = 0; j < GRIDSZY; j++)
-		{
-			if(g_blockgrid[i][j] > 0){
-				g_blockgrid[i][j] = 0;
-			}
-		}
-	}
-}
-
 /* Sets the player pieces, making them negative so they are effectively "placed" */
 void set_pieces(void)
 {
-}
-
-void do_gravity(void)
-{
-	if(g_second_timer->elapsed == true){/* If this frame falls on a second mark and there haven't been any collisions between the piece and a block/the ground */
-		int c = check_collisions(g_player.x, g_player.y, g_player.rotation); 
-		if(!(c & COLLISION_BLOCK) && !(c & COLLISION_FLOOR)){/* If it's safe to move the piece down */
-			g_player.y -= 1;
-		}
-	}
+	
 }
 
 void handle_blocks(void)
 {
-	int c;
 	if(g_player.type != NULL_PIECE){
-		do_gravity();
-		clear_player();
-		write_player();
-		
-		/* Check if we should "set" the piece and make it blocks, i.e. it hit a block or the floor */
-		c = check_collisions(g_player.x, g_player.y, g_player.rotation);
-		if((c & COLLISION_BLOCK) || (c & COLLISION_FLOOR)){
-			set_pieces();
-			g_player.type = NULL_PIECE;
-			g_player.piece.a = NULL;
+		int c;
+
+		if(g_player.move == LEFT){
+			c = check_collisions(g_player.x - 1, g_player.y, g_player.rotation);
+			if(!(c & COLLISION_BLOCK) && !(c & COLLISION_LWALL)){
+				g_player.x -= 1;
+				g_player.move = NONE;
+			}
+		}
+		if(g_player.move == RIGHT){
+			c = check_collisions(g_player.x + 1, g_player.y, g_player.rotation);
+			if(!(c & COLLISION_BLOCK) && !(c & COLLISION_RWALL)){
+				g_player.x += 1;
+				g_player.move = NONE;
+			}
+		}
+	
+		if(g_second_timer->elapsed == true){/* If this frame falls on a second mark and there haven't been any collisions between the piece and a block/the ground */
+			int c = check_collisions(g_player.x, g_player.y, g_player.rotation); 
+			if(!(c & COLLISION_BLOCK) && !(c & COLLISION_FLOOR)){/* If it's safe to move the piece down */
+				g_player.y -= 1;
+			} else {
+				set_pieces();
+				g_player.type = NULL_PIECE;
+				g_player.piece.a = NULL;
+			}
 		}
 	} else {
-		spawn_piece(4);
+		spawn_piece(S_PIECE);
 	}
 }
 
