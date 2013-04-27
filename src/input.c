@@ -29,7 +29,11 @@ void handle_input(void)
 				case SDLK_LEFT:
 					g_player.move = LEFT;
 					break;
-					
+		
+				case SDLK_UP:
+					g_player.snap = true;
+					break;
+
 				case SDLK_SPACE:
 					g_player.rotate = RIGHT;
 					break;

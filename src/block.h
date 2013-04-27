@@ -56,6 +56,7 @@ typedef struct player_info
 	piece_ptr_t	piece;
 	int		move;	/* Should we attempt to move left or right? */
 	int		rotate; /* Should we attempt to rotate left or right? */
+	bool		snap;	/* Should we snap the piece down? */
 } player_info_t;
 
 extern player_info_t g_player;

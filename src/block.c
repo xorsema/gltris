@@ -258,6 +258,17 @@ void do_movement(void)
 	if(g_player.type != NULL_PIECE){
 		int c;
 
+		if(g_player.snap == true){
+			while(!(check_collisions(g_player.x, g_player.y, g_player.rotation) & TOUCHING_FLOOR) && !(check_collisions(g_player.x, g_player.y-1, g_player.rotation) & COLLISION_BLOCK))
+			{
+				g_player.y -= 1;
+			}
+			g_player.snap = false;
+			set_pieces();
+			g_player.type = NULL_PIECE;
+			g_player.piece.a = NULL;
+		}
+
 		if(g_player.move == LEFT){
 			c = check_collisions(g_player.x - 1, g_player.y, g_player.rotation);
 			if(!(c & COLLISION_BLOCK) && !(c & COLLISION_LWALL)){
@@ -344,6 +355,7 @@ void spawn_piece(unsigned int id)
 	g_player.y = 20;
 	g_player.rotate = NONE;
 	g_player.move = NONE;
+	g_player.snap = false;
 	switch(id)
 	{
 	case I_PIECE:
