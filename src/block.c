@@ -218,8 +218,12 @@ int check_collisions(int inx, int iny, unsigned int inrot)
 				r |= COLLISION_LWALL;
 			}
 
+			if(y == 0){
+				r |= TOUCHING_FLOOR;
+			}
+
 			/* Check collision with the floor */
-			if(y <= 0){
+			if(y < 0){
 				r |= COLLISION_FLOOR;
 			}
 
@@ -270,7 +274,7 @@ void do_movement(void)
 		}
 	
 		if(g_second_timer->elapsed == true){/* If this frame falls on a second mark and there haven't been any collisions between the piece and a block/the ground */
-			if(!(check_collisions(g_player.x, g_player.y, g_player.rotation) & COLLISION_FLOOR) && !(check_collisions(g_player.x, g_player.y-1, g_player.rotation) & COLLISION_BLOCK)){
+			if(!(check_collisions(g_player.x, g_player.y, g_player.rotation) & TOUCHING_FLOOR) && !(check_collisions(g_player.x, g_player.y-1, g_player.rotation) & COLLISION_BLOCK)){
 				g_player.y -= 1;
 			} else {
 				set_pieces();
@@ -281,10 +285,47 @@ void do_movement(void)
 	}
 }
 
+void fix_position(void)
+{
+	int c = check_collisions(g_player.x, g_player.y, g_player.rotation);
+	if(c != NO_COLLISION && c != TOUCHING_FLOOR){
+		if(c & COLLISION_RWALL)
+			g_player.x -= 1;
+		if(c & COLLISION_LWALL)
+			g_player.x += 1;
+		if(c & COLLISION_FLOOR)
+			g_player.y += 1;
+		if(c & COLLISION_BLOCK)
+			g_player.y += 1;
+		fix_position();		
+	}
+}
+
+void do_rotation(void)
+{
+	switch(g_player.rotate)
+	{
+	case NONE:
+		break;
+	case RIGHT:
+		g_player.rotation = (g_player.rotation == 3) ? 0 : g_player.rotation + 1;
+		g_player.rotate = NONE;
+		fix_position();
+		break;
+	case LEFT:
+		g_player.rotation = (g_player.rotation == 0) ? 3 : g_player.rotation - 1;
+		g_player.rotate = NONE;
+		fix_position();
+		break;
+	}
+
+}
+
 /* Take care of piece/block mechanics */
 void handle_blocks(void)
 {
 	do_movement();
+	do_rotation();
 
 	if(g_player.type == NULL_PIECE){
 		spawn_piece(S_PIECE);
@@ -299,6 +340,8 @@ void spawn_piece(unsigned int id)
 	g_player.type = id;
 	g_player.x = 4;
 	g_player.y = 20;
+	g_player.rotate = NONE;
+	g_player.move = NONE;
 	switch(id)
 	{
 	case I_PIECE:

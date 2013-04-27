@@ -18,7 +18,8 @@ typedef enum collision
 	COLLISION_BLOCK = 1,
 	COLLISION_LWALL = 2,
 	COLLISION_RWALL = 4,
-	COLLISION_FLOOR = 8
+	COLLISION_FLOOR = 8,
+	TOUCHING_FLOOR	= 16
 } collision_t;
 
 enum 
@@ -53,7 +54,8 @@ typedef struct player_info
 	unsigned int	type;	/* The type id of the player's piece */
 	bool		set;	/* true when the piece shouldn't move any more */
 	piece_ptr_t	piece;
-	int move; /* Should we attempt to move left or right? */
+	int		move;	/* Should we attempt to move left or right? */
+	int		rotate; /* Should we attempt to rotate left or right? */
 } player_info_t;
 
 extern player_info_t g_player;
