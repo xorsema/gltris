@@ -285,6 +285,7 @@ void do_movement(void)
 	}
 }
 
+/* Make sure the player piece isn't in a block/blocks */
 void fix_position(void)
 {
 	int c = check_collisions(g_player.x, g_player.y, g_player.rotation);
@@ -301,6 +302,7 @@ void fix_position(void)
 	}
 }
 
+/* Rotate our player piece if g_player.rotate is set */
 void do_rotation(void)
 {
 	switch(g_player.rotate)
