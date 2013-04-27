@@ -223,7 +223,7 @@ int check_collisions(int inx, int iny, unsigned int inrot)
 			}
 
 			/* Check collision with a placed block */
-			if(g_blockgrid[x][y] < 0){
+			if(g_blockgrid[x][y] != 0){
 				r |= COLLISION_BLOCK;
 			}
 		}
@@ -231,10 +231,20 @@ int check_collisions(int inx, int iny, unsigned int inrot)
 	return r;
 }
 
-/* Sets the player pieces, making them negative so they are effectively "placed" */
+/* Writes the player piece to the grid */
 void set_pieces(void)
 {
-	
+	int i, j;
+	for(i = 0; i < PBLOCKMAX; i++)
+	{
+		for(j = 0; j < PBLOCKMAX; j++)
+		{
+			int b = get_player_block(i, j);
+			if(b != 0){
+				g_blockgrid[g_player.x+i][g_player.y+j] = b;
+			}
+		}
+	}
 }
 
 void handle_blocks(void)
@@ -258,8 +268,7 @@ void handle_blocks(void)
 		}
 	
 		if(g_second_timer->elapsed == true){/* If this frame falls on a second mark and there haven't been any collisions between the piece and a block/the ground */
-			int c = check_collisions(g_player.x, g_player.y, g_player.rotation); 
-			if(!(c & COLLISION_BLOCK) && !(c & COLLISION_FLOOR)){/* If it's safe to move the piece down */
+			if(!(check_collisions(g_player.x, g_player.y, g_player.rotation) & COLLISION_FLOOR) && !(check_collisions(g_player.x, g_player.y-1, g_player.rotation) & COLLISION_BLOCK)){
 				g_player.y -= 1;
 			} else {
 				set_pieces();

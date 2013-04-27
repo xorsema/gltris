@@ -17,8 +17,8 @@
 /* Is the game running? */
 bool g_running;
 
-/* 2d array representing blocks in a grid, less than 0 == set block, greater than 0 == moving (player interaction), 0 == no block */
-int8_t g_blockgrid[GRIDSZX][GRIDSZY];
+
+uint8_t g_blockgrid[GRIDSZX][GRIDSZY];
 
 int gltris_init(void)
 {
@@ -46,9 +46,6 @@ void gltris_loop()
                 /* timer.c: Update all the timers and call the appropriate callbacks */
 		do_timers();
 
-		/* block.c: tests for collisions */
-//		do_collisions();
-
 		/* input.c: handles keyboard etc */
 		handle_input();
 		
@@ -58,6 +55,7 @@ void gltris_loop()
                 /* graphics.c: sets up proper rendering context for this frame */
 		graphics_begin_frame();
 
+		/* graphics.c: renders the player's piece */
 		graphics_render_player();
 
                 /* graphics.c: renders the blocks */

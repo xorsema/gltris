@@ -7,6 +7,6 @@
 #define BLOCKSIZE 24
 
 extern bool g_running;
-extern int8_t g_blockgrid[GRIDSZX][GRIDSZY];
+extern uint8_t g_blockgrid[GRIDSZX][GRIDSZY];
 
 #endif

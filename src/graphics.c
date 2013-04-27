@@ -111,7 +111,7 @@ void graphics_render_blockgrid(void)
 		for(j = 0; j < GRIDSZY; j++)
 		{
 			if((b = g_blockgrid[i][j]) != 0){
-				graphics_render_block(i, j, &g_piece_colors[abs(b)*3]); /* abs() because we don't want negatives to deref the color */
+				graphics_render_block(i, j, &g_piece_colors[b*3]); 
 			}
 		}
 		
