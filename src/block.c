@@ -184,6 +184,7 @@ const uint8_t Z_piece[4][3][3] = {
 };
 
 
+/* Check for collisions, returning NO_COLLISION if none have been found */
 int check_collisions(int inx, int iny, unsigned int inrot)
 {
 	int i, j, x, y, max, b, r;
@@ -247,7 +248,8 @@ void set_pieces(void)
 	}
 }
 
-void handle_blocks(void)
+/* Handle all movement of the player piece */
+void do_movement(void)
 {
 	if(g_player.type != NULL_PIECE){
 		int c;
@@ -276,11 +278,21 @@ void handle_blocks(void)
 				g_player.piece.a = NULL;
 			}
 		}
-	} else {
-		spawn_piece(S_PIECE);
 	}
 }
 
+/* Take care of piece/block mechanics */
+void handle_blocks(void)
+{
+	do_movement();
+
+	if(g_player.type == NULL_PIECE){
+		spawn_piece(S_PIECE);
+	}
+	
+}
+
+/* Give the player a new piece */
 void spawn_piece(unsigned int id)
 {
 	g_player.rotation = 0;
