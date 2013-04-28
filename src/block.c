@@ -2,13 +2,15 @@
 #include <stdbool.h>
 #include <SDL/SDL.h>
 #include <math.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "gltris.h"
 #include "block.h"
 #include "timer.h"
 
-collision_t g_player_collisions;
 player_info_t g_player;
+grabbag_t g_grabbag;
 
 const uint8_t I_piece[4][4][4] = {
 
@@ -183,6 +185,26 @@ const uint8_t Z_piece[4][3][3] = {
 	}
 };
 
+void regenerate_bag(void)
+{
+	int i, max, min;
+	max = Z_PIECE;
+	min = I_PIECE;
+	for(i = 0; i < 7; i++)
+	{
+		g_grabbag.pieces[i] = rand() % (max-min+1)+min;
+	}	
+	g_grabbag.index = 0;
+}
+
+int get_next_piece(void)
+{
+	if(g_grabbag.index > 6)
+		regenerate_bag();
+	int ret = g_grabbag.pieces[g_grabbag.index];
+	g_grabbag.index += 1;
+	return ret;
+}
 
 /* Check for collisions, returning NO_COLLISION if none have been found */
 int check_collisions(int inx, int iny, unsigned int inrot)
@@ -341,7 +363,7 @@ void handle_blocks(void)
 	do_rotation();
 
 	if(g_player.type == NULL_PIECE){
-		spawn_piece(S_PIECE);
+		spawn_piece(get_next_piece());
 	}
 	
 }

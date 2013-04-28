@@ -7,6 +7,7 @@
 #include <SDL/SDL_ttf.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <time.h>
 
 #include "gltris.h"
 #include "graphics.h"
@@ -28,6 +29,7 @@ int gltris_init(void)
 		return 1;
 	
 	memset(g_blockgrid, 0, sizeof(g_blockgrid));
+	srand(time(NULL));
 
 	spawn_piece(I_PIECE);
 	

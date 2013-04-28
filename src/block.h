@@ -10,7 +10,6 @@ void spawn_piece(unsigned int);
 void clear_player(void);
 void do_wallkicks(void);
 int check_collisions(int, int, unsigned int);
-extern const int g_piece_blocks[];
 
 typedef enum collision
 {
@@ -59,8 +58,13 @@ typedef struct player_info
 	bool		snap;	/* Should we snap the piece down? */
 } player_info_t;
 
-extern player_info_t g_player;
+typedef struct grabbag
+{
+	unsigned int	pieces[7];
+	unsigned int	index;
+} grabbag_t;
 
-extern collision_t g_player_collisions;
+extern player_info_t g_player;
+extern grabbag_t g_grabbag;
 
 #endif
