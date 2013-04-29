@@ -62,6 +62,7 @@ typedef struct grabbag
 {
 	unsigned int	pieces[7];
 	unsigned int	index;
+	unsigned int	npiece;
 } grabbag_t;
 
 extern player_info_t g_player;

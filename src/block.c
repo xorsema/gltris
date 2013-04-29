@@ -274,6 +274,71 @@ void set_pieces(void)
 	}
 }
 
+/* Check for any full rows, return the max and min as two 16bit ints in one 32 bit int */
+unsigned int check_rows(void)
+{
+	int i, j;
+	unsigned int result;
+	unsigned short int max, min;
+	bool fr, nfr = true, ms = false;
+
+	for(j = 0; j < GRIDSZY; j++)
+	{
+		for(i = 0, fr = true; i < GRIDSZX; i++)
+		{
+			if(g_blockgrid[i][j] == 0){
+				fr = false;
+				break;
+			}
+		}
+
+		if(fr == true){
+			max = j;
+			nfr = false;
+		}
+
+		if(ms != true && fr == true){
+			min = j;
+			ms = true;
+		}
+	}
+
+	/* If there were no full rows, return a constant to indicate failure */
+	if(nfr == true){
+		result = 0xDEADBEEF;
+	} else {
+                /* Store the max as the high 16 bits of result, and the min as the low 16 bits */
+		result = (max << 16);
+		result += (min & 0xFFFF);
+	}
+	return result;
+}
+
+void clear_rows(unsigned int high, unsigned int low)
+{
+	int i, j;
+	for(j = low; j != (high+1); j++)
+	{
+		for(i = 0; i < GRIDSZX; i++)
+		{
+			g_blockgrid[i][j] = 0;
+		}
+	}
+}
+
+void handle_clearance(void)
+{
+	unsigned int r;
+	unsigned short int max, min;
+
+	r = check_rows();
+	max = (r >> 16);
+	min = r & 0xFFFF;
+
+	if(r != 0xDEADBEEF)
+		clear_rows(max, min);
+}
+
 /* Handle all movement of the player piece */
 void do_movement(void)
 {
@@ -289,6 +354,7 @@ void do_movement(void)
 			set_pieces();
 			g_player.type = NULL_PIECE;
 			g_player.piece.a = NULL;
+			handle_clearance();
 		}
 
 		if(g_player.move == LEFT){
@@ -313,6 +379,7 @@ void do_movement(void)
 				set_pieces();
 				g_player.type = NULL_PIECE;
 				g_player.piece.a = NULL;
+				handle_clearance();
 			}
 		}
 	}
