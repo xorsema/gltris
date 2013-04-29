@@ -10,6 +10,8 @@ void spawn_piece(unsigned int);
 void clear_player(void);
 void do_wallkicks(void);
 int check_collisions(int, int, unsigned int);
+int get_next_piece(void);
+void regenerate_bag(void);
 
 typedef enum collision
 {

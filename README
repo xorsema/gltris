@@ -24,11 +24,13 @@ the grid is 10x22 with 2 of the 22 hidden at the top
 
 each block is therefore 24x24
 
-TODO:
+TODO (Now in order of priority):
 
 Rotation - DONE!
 Wall kicks - DONE!
-row clearance
-Side menu
+row clearance - DONE!
+Game reset on failure (no more room)
+Levels/speed changes
 scoring
+Side menu
 background?

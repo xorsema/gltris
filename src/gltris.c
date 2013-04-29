@@ -31,7 +31,8 @@ int gltris_init(void)
 	memset(g_blockgrid, 0, sizeof(g_blockgrid));
 	srand(time(NULL));
 
-	spawn_piece(I_PIECE);
+	regenerate_bag();
+	spawn_piece(get_next_piece());
 	
 	return 0;
 }

@@ -314,6 +314,7 @@ unsigned int check_rows(void)
 	return result;
 }
 
+/* Clear all rows from low to high */
 void clear_rows(unsigned int high, unsigned int low)
 {
 	int i, j;
@@ -326,6 +327,24 @@ void clear_rows(unsigned int high, unsigned int low)
 	}
 }
 
+/* Shift all rows from target up down by offset */
+void shift_rows(unsigned int target, unsigned int offset)
+{
+	int i, j;
+	unsigned int tb;
+
+	for(j = target; j < GRIDSZY; j++)
+	{
+		for(i = 0; i < GRIDSZX; i++)
+		{
+			tb = g_blockgrid[i][j];
+			g_blockgrid[i][j] = 0;
+			g_blockgrid[i][j-offset] = tb;
+		}
+	}
+}
+
+/* If any rows have been completely filled, clear them, then move down the other blocks */
 void handle_clearance(void)
 {
 	unsigned int r;
@@ -335,8 +354,11 @@ void handle_clearance(void)
 	max = (r >> 16);
 	min = r & 0xFFFF;
 
-	if(r != 0xDEADBEEF)
+	if(r != 0xDEADBEEF){
 		clear_rows(max, min);
+		shift_rows(max+1, (max+1) - min);
+	}
+	
 }
 
 /* Handle all movement of the player piece */
