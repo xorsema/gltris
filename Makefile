@@ -1,6 +1,10 @@
 CC = gcc
-CFLAGS = -std=c99 -g
-LINK = -lGL -lGLU -lSDL -lSDL_ttf -lm
+SDL_CFLAGS = $(shell sdl-config --cflags)
+FT_CFLAGS = $(shell freetype-config --cflags)
+SDL_LDFLAGS = $(shell sdl-config --libs)
+FT_LDFLAGS = $(shell freetype-config --libs)
+CFLAGS = -std=c99 -g $(SDL_CFLAGS) $(FT_CFLAGS)
+LINK = -lGL -lGLU -lm $(SDL_LDFLAGS) $(FT_LDFLAGS)
 VPATH = src/ : obj/
 OUT = bin/
 OBJ = obj/
@@ -15,7 +19,7 @@ gltris : $(SRCS:.c=.o)
 	$(CC) $(CFLAGS) $(LINK) -o $(OUT)$@ $^ 
 
 %.o : %.c
-	$(CC) $(CFLAGS) $(LINK) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 %.d: %.c
 	@set -e; rm -f $@; \
