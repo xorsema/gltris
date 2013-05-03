@@ -15,11 +15,9 @@
 #include "block.h"
 #include "timer.h"
 
-/* Is the game running? */
-bool g_running;
-
-
 uint8_t g_blockgrid[GRIDSZX][GRIDSZY];
+
+game_info_t g_game;
 
 int gltris_init(void)
 {
@@ -39,12 +37,13 @@ int gltris_init(void)
 
 void gltris_loop()
 {
-	g_running = true;
+	g_game.running = true;
+	g_game.gamestate = STATE_GAME;
 
 	g_second_timer = add_timer(1000, NULL);
 
 	/* Main game loop */
-	while(g_running)
+	while(g_game.running)
 	{
                 /* timer.c: Update all the timers and call the appropriate callbacks */
 		do_timers();
@@ -52,17 +51,26 @@ void gltris_loop()
 		/* input.c: handles keyboard etc */
 		handle_input();
 		
-		/* block.c: handles block behaviour */
-		handle_blocks();
-
                 /* graphics.c: sets up proper rendering context for this frame */
 		graphics_begin_frame();
 
-		/* graphics.c: renders the player's piece */
-		graphics_render_player();
+		/* Do different things depending on the gamestate */
+		switch(g_game.gamestate)
+		{
+		case STATE_GAME:
+			/* block.c: handles block behaviour */
+			handle_blocks();
+			
+			/* graphics.c: renders the player's piece */
+			graphics_render_player();
+			
+			/* graphics.c: renders the blocks */
+			graphics_render_blockgrid();
+			break;
 
-                /* graphics.c: renders the blocks */
-		graphics_render_blockgrid();
+		default:
+			break;
+		}
 
 		/* graphics.c: swaps buffers, etc */
 		graphics_end_frame();

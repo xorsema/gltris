@@ -5,12 +5,12 @@ typedef void (*ttimercb_t)(void);
 
 typedef struct ttimer
 {
-	uint32_t amt,        /* How long the timer is for (ms) */
-		last;        /* The last time the timer was reset (ms) */
-	bool elapsed;        /* This is set to true if the timer elapsed this frame */
-	ttimercb_t cb;       /* This will be called when the timer has elapsed */
-	struct ttimer *next, /* Next timer in the list */
-		*prev;       /* Previous timer in the list */
+	uint32_t	 amt;   /* How long the timer is for (ms) */
+	uint32_t	 last;	/* The last time the timer was reset (ms) */
+	bool		 elapsed;	/* This is set to true if the timer elapsed this frame */
+	ttimercb_t	 cb;    /* This will be called when the timer has elapsed */
+	struct ttimer	*next;	/* Next timer in the list */
+	struct ttimer	*prev;	/* Previous timer in the list */
 	
 } ttimer_t;/* Note the second "t" to avoid conflict in naming with the standard library */
 

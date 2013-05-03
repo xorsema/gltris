@@ -15,12 +15,12 @@ void regenerate_bag(void);
 
 typedef enum collision
 {
-	NO_COLLISION	= 0,
-	COLLISION_BLOCK = 1,
-	COLLISION_LWALL = 2,
-	COLLISION_RWALL = 4,
-	COLLISION_FLOOR = 8,
-	TOUCHING_FLOOR	= 16,
+	NO_COLLISION	  = 0,
+	COLLISION_BLOCK	  = 1,
+	COLLISION_LWALL	  = 2,
+	COLLISION_RWALL	  = 4,
+	COLLISION_FLOOR	  = 8,
+	TOUCHING_FLOOR	  = 16,
 	COLLISION_CEILING = 32
 } collision_t;
 
