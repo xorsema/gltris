@@ -20,7 +20,8 @@ typedef enum collision
 	COLLISION_LWALL = 2,
 	COLLISION_RWALL = 4,
 	COLLISION_FLOOR = 8,
-	TOUCHING_FLOOR	= 16
+	TOUCHING_FLOOR	= 16,
+	COLLISION_CEILING = 32
 } collision_t;
 
 enum 

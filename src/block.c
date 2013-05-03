@@ -253,13 +253,16 @@ int check_collisions(int inx, int iny, unsigned int inrot)
 			if(g_blockgrid[x][y] != 0){
 				r |= COLLISION_BLOCK;
 			}
+			
+			if(y > GRIDSZY-3)
+				r |= COLLISION_CEILING;
 		}
 	}
 	return r;
 }
 
 /* Writes the player piece to the grid */
-void set_pieces(void)
+void set_piece(void)
 {
 	int i, j;
 	for(i = 0; i < PBLOCKMAX; i++)
@@ -361,6 +364,25 @@ void handle_clearance(void)
 	
 }
 
+void do_reset(void)
+{
+	clear_rows(GRIDSZY-1, 0);
+	spawn_piece(get_next_piece());
+}
+
+/* Make sure we can set the piece, then set it, or reset the game */
+void handle_placement(void)
+{
+	if(check_collisions(g_player.x, g_player.y, g_player.rotation) & COLLISION_CEILING){
+		do_reset();
+		return;
+	}
+	set_piece();
+	g_player.type = NULL_PIECE;
+	g_player.piece.a = NULL;
+	handle_clearance();
+}
+
 /* Handle all movement of the player piece */
 void do_movement(void)
 {
@@ -373,10 +395,7 @@ void do_movement(void)
 				g_player.y -= 1;
 			}
 			g_player.snap = false;
-			set_pieces();
-			g_player.type = NULL_PIECE;
-			g_player.piece.a = NULL;
-			handle_clearance();
+			handle_placement();
 		}
 
 		if(g_player.move == LEFT){
@@ -398,10 +417,7 @@ void do_movement(void)
 			if(!(check_collisions(g_player.x, g_player.y, g_player.rotation) & TOUCHING_FLOOR) && !(check_collisions(g_player.x, g_player.y-1, g_player.rotation) & COLLISION_BLOCK)){
 				g_player.y -= 1;
 			} else {
-				set_pieces();
-				g_player.type = NULL_PIECE;
-				g_player.piece.a = NULL;
-				handle_clearance();
+				handle_placement();
 			}
 		}
 	}
@@ -411,7 +427,7 @@ void do_movement(void)
 void fix_position(void)
 {
 	int c = check_collisions(g_player.x, g_player.y, g_player.rotation);
-	if(c != NO_COLLISION && c != TOUCHING_FLOOR){
+	if(c != NO_COLLISION && c != TOUCHING_FLOOR && c != COLLISION_CEILING){
 		if(c & COLLISION_RWALL)
 			g_player.x -= 1;
 		if(c & COLLISION_LWALL)
@@ -453,8 +469,7 @@ void handle_blocks(void)
 
 	if(g_player.type == NULL_PIECE){
 		spawn_piece(get_next_piece());
-	}
-	
+	}	
 }
 
 /* Give the player a new piece */
