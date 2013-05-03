@@ -7,6 +7,9 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <time.h>
+#include <ft2build.h>
+#include <freetype/freetype.h>
+#include <freetype/ftglyph.h>
 
 #include "gltris.h"
 #include "graphics.h"
