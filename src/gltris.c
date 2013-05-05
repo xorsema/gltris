@@ -16,6 +16,7 @@
 #include "input.h"
 #include "block.h"
 #include "timer.h"
+#include "text.h"
 
 uint8_t g_blockgrid[GRIDSZX][GRIDSZY];
 
@@ -28,11 +29,14 @@ int gltris_init(void)
 	if(graphics_init() != 0)
 		return 1;
 	
+	if(text_init() != 0)
+		return 1;
+
 	memset(g_blockgrid, 0, sizeof(g_blockgrid));
 	srand(time(NULL));
 
 	regenerate_bag();
-	spawn_piece(get_next_piece());
+//	spawn_piece(get_next_piece());
 	
 	return 0;
 }
@@ -40,7 +44,7 @@ int gltris_init(void)
 void gltris_loop()
 {
 	g_game.running = true;
-	g_game.gamestate = STATE_GAME;
+	g_game.gamestate = STATE_SPLASH;
 
 	g_second_timer = add_timer(1000, NULL);
 
@@ -68,6 +72,13 @@ void gltris_loop()
 			
 			/* graphics.c: renders the blocks */
 			graphics_render_blockgrid();
+			break;
+			
+		case STATE_SPLASH:
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+			glColor3f(1.0, 1.0, 1.0);
+			glRasterPos2i(100, 100);
+			text_print("I am a test");
 			break;
 
 		default:
