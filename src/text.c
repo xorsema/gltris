@@ -24,7 +24,7 @@ int text_init(void)
 	/* Open up our font face */
 	if((error = FT_New_Face(library, FONTPATH, 0, &face)) != 0)
 		return error;
-	FT_Set_Char_Size(face, 0, 8*64, 300, 300);
+	FT_Set_Char_Size(face, 0, 12*64, 300, 300);
 	
 }
 
