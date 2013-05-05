@@ -35,8 +35,8 @@ void text_print(char *t)
 
 	for(n = 0; t[n] != '\0'; n++)
 	{
-		error = FT_Load_Char(face, t[n], FT_LOAD_RENDER);
+		error = FT_Load_Char(face, t[n], FT_LOAD_MONOCHROME | FT_LOAD_RENDER);
 
-		glBitmap(face->glyph->bitmap.width, face->glyph->bitmap.rows, 0, 0, face->glyph->advance.x >> 6, 0, face->glyph->bitmap.buffer);
+		glBitmap(face->glyph->bitmap.width, face->glyph->bitmap.rows, 0, 0, face->glyph->advance.x >> 6, 0, (face->glyph->bitmap).buffer);
 	}
 }
