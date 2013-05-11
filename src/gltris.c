@@ -75,10 +75,7 @@ void gltris_loop()
 			break;
 			
 		case STATE_SPLASH:
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-			glColor3f(1.0, 1.0, 1.0);
-			glRasterPos2i(0, 0);
-			text_print("I am a test");
+			text_print(10, 10, "Hello.");
 			break;
 
 		default:

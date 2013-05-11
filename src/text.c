@@ -17,26 +17,51 @@ int text_init(void)
 {
 	int error;
 	
-	/* Set up freetype */
-	if((error = FT_Init_FreeType(&library)) != 0)
+	error = FT_Init_FreeType(&library);
+	if(error != 0)
 		return error;
 
-	/* Open up our font face */
-	if((error = FT_New_Face(library, FONTPATH, 0, &face)) != 0)
+	error = FT_New_Face(library, FONTPATH, 0, &face);
+	if(error != 0)
 		return error;
-	FT_Set_Char_Size(face, 0, 12*64, 300, 300);
-	
+
+	error = FT_Set_Char_Size(face, 0, 16*64, 300, 300);
+	if(error != 0)
+		return error;
+
+	return 0;
 }
 
-/* Draw the desired text in the current font face at the current raster position */
-void text_print(char *t)
+static void text_gen_texture(char c, GLuint *out)
 {
-	int	n, error;
+	GLuint result;
 
-	for(n = 0; t[n] != '\0'; n++)
+	glGenTextures(1, &result);
+	glBindTexture(GL_TEXTURE_2D, result);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, face->glyph->bitmap.width, face->glyph->bitmap.rows, 0, GL_ALPHA, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
+
+	*out = result;
+}
+
+void text_print(float x, float y, char *t)
+{
+	GLuint	texname;
+	int	n;
+	float	pen_x = 0;
+	float	pen_y = 0;
+
+	for(n = 0; t[n] != 0; n++)
 	{
-		error = FT_Load_Char(face, t[n], FT_LOAD_MONOCHROME | FT_LOAD_RENDER);
+		
+		if(FT_Load_Char(face, t[n], FT_LOAD_RENDER) != 0)
+			continue;
 
-		glBitmap(face->glyph->bitmap.width, face->glyph->bitmap.rows, 0, 0, face->glyph->advance.x >> 6, 0, (face->glyph->bitmap).buffer);
+		text_gen_texture(t[n], &texname);
+		render_textured_quad(texname, x+pen_x, y+pen_y, (face->glyph->bitmap).width, (face->glyph->bitmap).rows);
+		pen_x += face->glyph->advance.x >> 6;
+		pen_y += face->glyph->advance.y >> 6;
 	}
 }

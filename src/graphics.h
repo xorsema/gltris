@@ -14,6 +14,8 @@ void graphics_render_block(int, int, const uint8_t*);
 void graphics_render_blockgrid(void);
 void graphics_render_player(void);
 void do_rotation(float, float, float *, float *, float);
+int surface_to_texture(SDL_Surface *, GLuint *, bool, GLenum);
+void render_textured_quad(GLuint, float, float, float, float);
 
 typedef uint8_t rgb_t[3];
 typedef uint8_t rgba_t[4];

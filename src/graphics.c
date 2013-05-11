@@ -37,6 +37,7 @@ int graphics_init(void)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glDisable(GL_DEPTH_TEST); /* We don't need this for 2d */
+	glEnable(GL_BLEND);
 
 	return 0;
 }
@@ -116,4 +117,65 @@ void graphics_render_blockgrid(void)
 		}
 		
 	}
+}
+
+void render_textured_quad(GLuint texname, float x, float y, float w, float h)
+{
+	glPushMatrix();
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texname);
+	
+	glTranslatef(x, y, 0.0);
+
+	glBegin(GL_QUADS);
+
+	glVertex2f(0.0, 0.0); 
+	glTexCoord2f(0.0, 0.0);
+	
+	glVertex2f(w, 0); 
+	glTexCoord2f(1.0, 0.0);
+	
+	glVertex2f(w, h); 
+	glTexCoord2f(1.0, 1.0);
+	
+	glVertex2f(0, h); 
+	glTexCoord2f(0.0, 1.0);
+
+	glEnd();
+
+	glPopMatrix();
+}
+
+/* Convert an SDL_Surface to an OpenGL texture, return 0 on success */
+int surface_to_texture(SDL_Surface *s, GLuint *tn, bool free, GLenum fmt)
+{
+	GLenum	format;
+	GLuint	result;
+
+	/* If the format isn't specified, attempt to guess it */
+	if(fmt != 0){
+		format = fmt;
+	} else if(s->format->BytesPerPixel == 3){
+		format = GL_RGB;
+	} else if(s->format->BytesPerPixel == 4){
+		format = GL_RGBA;
+	} else {
+		return 1;
+	}
+
+	glGenTextures(1, &result);
+	glBindTexture(GL_TEXTURE_2D, result);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 
+			GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, s->format->BytesPerPixel, s->w, s->h, 0, format, GL_UNSIGNED_BYTE, s->pixels);
+
+	*tn = result;
+
+	if(free)
+		SDL_FreeSurface(s);
+
+	return 0;
 }
