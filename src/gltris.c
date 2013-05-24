@@ -48,6 +48,11 @@ void gltris_loop()
 
 	g_second_timer = add_timer(1000, NULL);
 
+	int texname;
+	SDL_Surface* temp;
+	temp = SDL_LoadBMP("test.bmp");
+	surface_to_texture(temp, &texname, true, 0);
+
 	/* Main game loop */
 	while(g_game.running)
 	{
@@ -75,7 +80,8 @@ void gltris_loop()
 			break;
 			
 		case STATE_SPLASH:
-			text_print(10, 10, "Hello.");
+			text_print(10, 10, "This is a test: TETRIS");
+//			render_textured_quad(texname, 0, 0, 640, 480);
 			break;
 
 		default:

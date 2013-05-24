@@ -25,7 +25,7 @@ int text_init(void)
 	if(error != 0)
 		return error;
 
-	error = FT_Set_Char_Size(face, 0, 16*64, 300, 300);
+	error = FT_Set_Char_Size(face, 0, 16*64, 96, 96);
 	if(error != 0)
 		return error;
 
@@ -38,10 +38,9 @@ static void text_gen_texture(char c, GLuint *out)
 
 	glGenTextures(1, &result);
 	glBindTexture(GL_TEXTURE_2D, result);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, face->glyph->bitmap.width, face->glyph->bitmap.rows, 0, GL_ALPHA, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, face->glyph->bitmap.width, face->glyph->bitmap.rows, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
 
 	*out = result;
 }
@@ -60,7 +59,36 @@ void text_print(float x, float y, char *t)
 			continue;
 
 		text_gen_texture(t[n], &texname);
-		render_textured_quad(texname, x+pen_x, y+pen_y, (face->glyph->bitmap).width, (face->glyph->bitmap).rows);
+//		render_textured_quad(texname, x+pen_x, y+pen_y, (face->glyph->bitmap).width, (face->glyph->bitmap).rows);
+
+		FT_Bitmap bm = face->glyph->bitmap;
+
+		glPushMatrix();
+		
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texname);
+	
+		glTranslatef(x+pen_x, y+pen_y, 0.0);
+
+		glBegin(GL_QUADS);
+
+		glTexCoord2f(0.0, 0.0);
+		glVertex2f(0.0, bm.rows); 
+		
+		glTexCoord2f(0.0, 1.0);
+		glVertex2f(0, 0); 
+	
+		glTexCoord2f(1.0, 1.0);
+		glVertex2f(bm.width, 0.0); 
+		
+		glTexCoord2f(1.0, 0.0);
+		glVertex2f(bm.width, bm.rows); 
+		
+		glEnd();
+
+		glPopMatrix();
+
+
 		pen_x += face->glyph->advance.x >> 6;
 		pen_y += face->glyph->advance.y >> 6;
 	}

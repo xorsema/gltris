@@ -38,6 +38,7 @@ int graphics_init(void)
 	glLoadIdentity();
 	glDisable(GL_DEPTH_TEST); /* We don't need this for 2d */
 	glEnable(GL_BLEND);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	return 0;
 }
@@ -166,10 +167,8 @@ int surface_to_texture(SDL_Surface *s, GLuint *tn, bool free, GLenum fmt)
 
 	glGenTextures(1, &result);
 	glBindTexture(GL_TEXTURE_2D, result);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 
-			GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, s->format->BytesPerPixel, s->w, s->h, 0, format, GL_UNSIGNED_BYTE, s->pixels);
 
 	*tn = result;
