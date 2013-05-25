@@ -32,17 +32,47 @@ int text_init(void)
 	return 0;
 }
 
+/* Expand the current bitmap to fit the GL_LUMINANCE_ALPHA format, essentially doubling the data */
+static void *expand_texture(void)
+{
+	int x, y, w, h;
+	GLubyte *nd; 
+	GLubyte *od; 
+	
+	nd = (GLubyte*)malloc(sizeof(GLubyte) * 2 * (face->glyph->bitmap.width) * (face->glyph->bitmap.rows));
+	memset(nd, 0, sizeof(GLubyte));
+	od = face->glyph->bitmap.buffer;
+	w = face->glyph->bitmap.width;
+	h = face->glyph->bitmap.rows;
+
+	for(y = 0; y < h; y++)
+	{
+		for(x = 0; x < w; x++)
+		{
+			nd[2*(y*w + x)] = nd[2*(y*w + x) + 1] = od[(y*w) + x];
+		}
+	}
+
+	return nd;
+}
+
 static void text_gen_texture(char c, GLuint *out)
 {
 	GLuint result;
+	GLubyte *buf;
 
 	glGenTextures(1, &result);
 	glBindTexture(GL_TEXTURE_2D, result);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, face->glyph->bitmap.width, face->glyph->bitmap.rows, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
+
+	buf = expand_texture();
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, face->glyph->bitmap.width, face->glyph->bitmap.rows, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, buf);
 
 	*out = result;
+
+	free(buf);
 }
 
 void text_print(float x, float y, char *t)

@@ -61,6 +61,13 @@ void handle_input(void)
 			case SDL_QUIT:
 				g_game.running = false;
 				break;
+			case SDL_KEYDOWN:
+				switch(event.key.keysym.sym)
+				{
+				case SDLK_RETURN:
+					g_game.gamestate = STATE_GAME;
+					break;
+				}
 			}
 			break;
 		}

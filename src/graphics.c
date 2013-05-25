@@ -37,7 +37,7 @@ int graphics_init(void)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glDisable(GL_DEPTH_TEST); /* We don't need this for 2d */
-	glEnable(GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	return 0;
@@ -125,6 +125,7 @@ void render_textured_quad(GLuint texname, float x, float y, float w, float h)
 	glPushMatrix();
 
 	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
 	glBindTexture(GL_TEXTURE_2D, texname);
 	
 	glTranslatef(x, y, 0.0);
@@ -144,6 +145,9 @@ void render_textured_quad(GLuint texname, float x, float y, float w, float h)
 	glVertex2f(w, h); 
 
 	glEnd();
+
+	glDisable(GL_BLEND);
+	glDisable(GL_TEXTURE_2D);
 
 	glPopMatrix();
 }
