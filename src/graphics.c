@@ -131,17 +131,17 @@ void render_textured_quad(GLuint texname, float x, float y, float w, float h)
 
 	glBegin(GL_QUADS);
 
-	glVertex2f(0.0, 0.0); 
 	glTexCoord2f(0.0, 0.0);
+	glVertex2f(0.0, h); 
 	
-	glVertex2f(w, 0); 
-	glTexCoord2f(1.0, 0.0);
-	
-	glVertex2f(w, h); 
-	glTexCoord2f(1.0, 1.0);
-	
-	glVertex2f(0, h); 
 	glTexCoord2f(0.0, 1.0);
+	glVertex2f(0, 0); 
+		
+	glTexCoord2f(1.0, 1.0);
+	glVertex2f(w, 0.0); 
+	
+	glTexCoord2f(1.0, 0.0);
+	glVertex2f(w, h); 
 
 	glEnd();
 

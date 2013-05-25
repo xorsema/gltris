@@ -59,35 +59,7 @@ void text_print(float x, float y, char *t)
 			continue;
 
 		text_gen_texture(t[n], &texname);
-//		render_textured_quad(texname, x+pen_x, y+pen_y, (face->glyph->bitmap).width, (face->glyph->bitmap).rows);
-
-		FT_Bitmap bm = face->glyph->bitmap;
-
-		glPushMatrix();
-		
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, texname);
-	
-		glTranslatef(x+pen_x, y+pen_y, 0.0);
-
-		glBegin(GL_QUADS);
-
-		glTexCoord2f(0.0, 0.0);
-		glVertex2f(0.0, bm.rows); 
-		
-		glTexCoord2f(0.0, 1.0);
-		glVertex2f(0, 0); 
-	
-		glTexCoord2f(1.0, 1.0);
-		glVertex2f(bm.width, 0.0); 
-		
-		glTexCoord2f(1.0, 0.0);
-		glVertex2f(bm.width, bm.rows); 
-		
-		glEnd();
-
-		glPopMatrix();
-
+		render_textured_quad(texname, x+pen_x, y+pen_y, (face->glyph->bitmap).width, (face->glyph->bitmap).rows);
 
 		pen_x += face->glyph->advance.x >> 6;
 		pen_y += face->glyph->advance.y >> 6;

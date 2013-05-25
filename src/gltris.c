@@ -80,8 +80,8 @@ void gltris_loop()
 			break;
 			
 		case STATE_SPLASH:
-			text_print(10, 10, "This is a test: TETRIS");
-//			render_textured_quad(texname, 0, 0, 640, 480);
+			render_textured_quad(texname, 0, 480-64, 127, 64);
+			text_print(0, 0, "This is a test: GLtris");
 			break;
 
 		default:
