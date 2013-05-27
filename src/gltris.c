@@ -36,7 +36,6 @@ int gltris_init(void)
 	srand(time(NULL));
 
 	regenerate_bag();
-//	spawn_piece(get_next_piece());
 	
 	return 0;
 }
@@ -45,9 +44,8 @@ void gltris_loop()
 {
 	g_game.running = true;
 	g_game.gamestate = STATE_SPLASH;
-//	g_game.gamestate = STATE_GAME;
 
-	g_second_timer = add_timer(1000, NULL);
+	g_fall_timer = add_timer(1000, NULL);
 
 	/* Main game loop */
 	while(g_game.running)

@@ -8,8 +8,7 @@
 /* Doubly linked list of timers, points to the beginning */
 ttimer_t *g_timers;
 
-/* Has a second elapsed? */
-ttimer_t *g_second_timer;
+ttimer_t *g_fall_timer;
 
 /* Add a timer to the list of timers (g_timers) */
 ttimer_t *add_timer(uint32_t ms, ttimercb_t cb)
@@ -65,15 +64,36 @@ void do_timers(void)
 	{
 		uint32_t ctime = SDL_GetTicks();
 		
-		if(ctime - p->last >= p->amt){/* If the timer has elapsed */
+		if(!p->paused && ctime - p->paused_time - p->last >= p->amt){/* If the timer has elapsed */
 			p->elapsed = true;/* Make sure the elapsed member is set */
 
 			if(p->cb != NULL)
 				p->cb();/* Call the callback if it exists */
 
 			p->last = ctime;/* Set the last time checked to now */
+			p->paused_time = 0;
 		} else {
 			p->elapsed = false;
 		}
 	}
+}
+
+void pause_timer(ttimer_t* t)
+{
+	t->paused = true;
+	t->paused_time = SDL_GetTicks();/* Set this to the current ticks temporarily */
+}
+
+void resume_timer(ttimer_t* t)
+{
+	t->paused = false;
+	t->paused_time = SDL_GetTicks() - t->paused_time; /* Make this correctly the time that has elapsed between pausing/resuming */
+}
+
+/* Change the timer's time. NOTE: this resets the timer */
+void modify_timer(ttimer_t* t, uint32_t time)
+{
+	t->amt = time;
+	t->elapsed = false;
+	t->last = SDL_GetTicks();
 }

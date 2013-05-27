@@ -413,7 +413,7 @@ void do_movement(void)
 			}
 		}
 	
-		if(g_second_timer->elapsed == true){/* If this frame falls on a second mark and there haven't been any collisions between the piece and a block/the ground */
+		if(g_fall_timer->elapsed == true){/* If on this frame we should move the piece down and there haven't been any collisions between the piece and a block/the ground */
 			if(!(check_collisions(g_player.x, g_player.y, g_player.rotation) & TOUCHING_FLOOR) && !(check_collisions(g_player.x, g_player.y-1, g_player.rotation) & COLLISION_BLOCK)){
 				g_player.y -= 1;
 			} else {

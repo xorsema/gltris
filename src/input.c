@@ -1,7 +1,6 @@
 #include <SDL/SDL.h>
 #include <stdbool.h>
 
-
 #include "input.h"
 #include "gltris.h"
 #include "timer.h"
