@@ -47,6 +47,8 @@ void gltris_loop()
 
 	g_fall_timer = add_timer(1000, NULL);
 
+	uint32_t w, h;
+
 	/* Main game loop */
 	while(g_game.running)
 	{
@@ -74,8 +76,10 @@ void gltris_loop()
 			break;
 			
 		case STATE_SPLASH:
-			text_print(0, 480/2, "GLtris");
-			text_print(0, 0, "Press ENTER to start!");
+			get_text_size(TITLETXT, &w, &h);
+			text_print((WWIDTH-w)/2, (WHEIGHT-h)/2, TITLETXT);
+			get_text_size(SPLASHTXT, &w, &h);
+			text_print((WWIDTH-w)/2, (WHEIGHT-h)/2 - 50, SPLASHTXT);
 			break;
 
 		default:

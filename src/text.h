@@ -7,5 +7,5 @@
 
 int text_init(void);
 void text_print(float, float, char*);
-
+void get_text_size(const char*, uint32_t*, uint32_t*);
 #endif

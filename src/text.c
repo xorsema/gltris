@@ -35,15 +35,15 @@ int text_init(void)
 /* Expand the current bitmap to fit the GL_LUMINANCE_ALPHA format, essentially doubling the data */
 static void *expand_texture(void)
 {
-	int x, y, w, h;
+	int	 x, y, w, h;
 	GLubyte *nd; 
 	GLubyte *od; 
 	
 	nd = (GLubyte*)malloc(sizeof(GLubyte) * 2 * (face->glyph->bitmap.width) * (face->glyph->bitmap.rows));
 	memset(nd, 0, sizeof(GLubyte));
 	od = face->glyph->bitmap.buffer;
-	w = face->glyph->bitmap.width;
-	h = face->glyph->bitmap.rows;
+	w  = face->glyph->bitmap.width;
+	h  = face->glyph->bitmap.rows;
 
 	for(y = 0; y < h; y++)
 	{
@@ -58,7 +58,7 @@ static void *expand_texture(void)
 
 static void text_gen_texture(char c, GLuint *out)
 {
-	GLuint result;
+	GLuint	 result;
 	GLubyte *buf;
 
 	glGenTextures(1, &result);
@@ -94,4 +94,23 @@ void text_print(float x, float y, char *t)
 		pen_x += face->glyph->advance.x >> 6;
 		pen_y += face->glyph->advance.y >> 6;
 	}
+}
+
+void get_text_size(const char *t, uint32_t *ow, uint32_t *oh)
+{
+	int		n;
+	uint32_t	w = 0;
+	uint32_t	h = 0;
+
+	for(n = 0; t[n] != 0; n++)
+	{
+		if(FT_Load_Char(face, t[n], FT_LOAD_RENDER) != 0)
+			continue;
+		h = (h == 0) ? (face->glyph->bitmap_top) : h;
+		h = (face->glyph->bitmap_top) > h ? (face->glyph->bitmap_top) : h;
+		w += (face->glyph->bitmap_left) + (face->glyph->advance.x >> 6);
+	} 
+
+	*ow = w;
+	*oh = h;
 }
