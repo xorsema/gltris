@@ -337,7 +337,7 @@ void handle_clearance(void)
 	if(r != 0xDEADBEEF){
 		clear_rows(max, min);
 		shift_rows(max+1, (max+1) - min);
-		handle_scoring(max - min);
+		handle_scoring((max+1) - min);
 	}	
 }
 
@@ -345,6 +345,9 @@ void do_reset(void)
 {
 	clear_rows(GRIDSZY-1, 0);
 	spawn_piece(get_next_piece());
+	g_game.level = 0;
+	g_game.rows_cleared = 0;
+	modify_timer(g_fall_timer, STARTINGTIME);
 }
 
 /* Make sure we can set the piece, then set it, or reset the game */

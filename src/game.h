@@ -5,8 +5,9 @@
 #define GRIDSZY 22
 #define BLOCKSIZE 24
 
-#define TIMERDECRATE (.25)
-#define ROWSPERLEVEL 3
+#define TIMERDECRATE (.50)
+#define ROWSPERLEVEL 5
+#define STARTINGTIME 1000
 
 typedef struct player_info
 {

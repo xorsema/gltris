@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <stdbool.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
@@ -9,10 +10,13 @@
 #include "gltris.h"
 #include "graphics.h"
 #include "text.h"
+#include "block.h"
+#include "game.h"
 
 FT_Library library;
 FT_Face face;
 
+/* Make sure freetype is up and running */
 int text_init(void)
 {
 	int error;
@@ -56,7 +60,8 @@ static void *expand_texture(void)
 	return nd;
 }
 
-static void text_gen_texture(char c, GLuint *out)
+/* Generate a texture from the current bitmap character in the slot */
+static void text_gen_texture(GLuint *out)
 {
 	GLuint	 result;
 	GLubyte *buf;
@@ -75,12 +80,15 @@ static void text_gen_texture(char c, GLuint *out)
 	free(buf);
 }
 
-void text_print(float x, float y, char *t)
+/* Print the text to the screen, requires a proper OpenGL context */
+void text_print(float x, float y, unsigned int size, char *t)
 {
 	GLuint	texname;
 	int	n;
 	float	pen_x = 0;
 	float	pen_y = 0;
+
+	FT_Set_Char_Size(face, 0, size*64, 96, 96);	
 
 	for(n = 0; t[n] != 0; n++)
 	{
@@ -88,7 +96,7 @@ void text_print(float x, float y, char *t)
 		if(FT_Load_Char(face, t[n], FT_LOAD_RENDER) != 0)
 			continue;
 
-		text_gen_texture(t[n], &texname);
+		text_gen_texture(&texname);
 		render_textured_quad(texname, x+pen_x, y+pen_y, (face->glyph->bitmap).width, (face->glyph->bitmap).rows);
 
 		pen_x += face->glyph->advance.x >> 6;
@@ -96,11 +104,14 @@ void text_print(float x, float y, char *t)
 	}
 }
 
-void get_text_size(const char *t, uint32_t *ow, uint32_t *oh)
+/* Get the width and height of the specified string with the specified font size */
+void get_text_size(const char *t, unsigned int size, uint32_t *ow, uint32_t *oh)
 {
 	int		n;
 	uint32_t	w = 0;
 	uint32_t	h = 0;
+
+	FT_Set_Char_Size(face, 0, size*64, 96, 96);
 
 	for(n = 0; t[n] != 0; n++)
 	{
@@ -115,7 +126,19 @@ void get_text_size(const char *t, uint32_t *ow, uint32_t *oh)
 	*oh = h;
 }
 
+/* Print some info about the current game */
 void print_game_info(void)
 {
-	//...
+	char buf[100];
+	unsigned int w, h, t;
+
+	sprintf(buf, "%i", g_game.level);
+	get_text_size(buf, 32, &w, &h);
+	glColor3f(1.0, 1.0, 1.0);
+	text_print(WWIDTH-w, WHEIGHT-h, 32, buf);
+	t = h;
+
+	sprintf(buf, "%i", g_game.rows_cleared);
+	get_text_size(buf, 32, &w, &h);
+	text_print(WWIDTH-w, WHEIGHT-h-t-10, 32, buf);
 }

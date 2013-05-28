@@ -43,7 +43,7 @@ void gltris_loop()
 	g_game.running = true;
 	g_game.gamestate = STATE_SPLASH;
 
-	g_fall_timer = add_timer(1000, NULL);
+	g_fall_timer = add_timer(STARTINGTIME, NULL);
 
 	uint32_t w, h;
 
@@ -71,13 +71,16 @@ void gltris_loop()
 			
 			/* graphics.c: renders the blocks */
 			graphics_render_blockgrid();
+
+			print_game_info();
+
 			break;
 			
 		case STATE_SPLASH:
-			get_text_size(TITLETXT, &w, &h);
-			text_print((WWIDTH-w)/2, (WHEIGHT-h)/2, TITLETXT);
-			get_text_size(SPLASHTXT, &w, &h);
-			text_print((WWIDTH-w)/2, (WHEIGHT-h)/2 - 50, SPLASHTXT);
+			get_text_size(TITLETXT, 16, &w, &h);
+			text_print((WWIDTH-w)/2, (WHEIGHT-h)/2, 16, TITLETXT);
+			get_text_size(SPLASHTXT, 16, &w, &h);
+			text_print((WWIDTH-w)/2, (WHEIGHT-h)/2 - 50, 16, SPLASHTXT);
 			break;
 
 		default:
