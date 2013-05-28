@@ -183,27 +183,6 @@ const uint8_t Z_piece[4][3][3] = {
 	}
 };
 
-void regenerate_bag(void)
-{
-	int i, max, min;
-	max = Z_PIECE;
-	min = I_PIECE;
-	for(i = 0; i < 7; i++)
-	{
-		g_grabbag.pieces[i] = rand() % (max-min+1)+min;
-	}	
-	g_grabbag.index = 0;
-}
-
-int get_next_piece(void)
-{
-	if(g_grabbag.index > 6)
-		regenerate_bag();
-	int ret = g_grabbag.pieces[g_grabbag.index];
-	g_grabbag.index += 1;
-	return ret;
-}
-
 /* Check for collisions, returning NO_COLLISION if none have been found */
 int check_collisions(int inx, int iny, unsigned int inrot)
 {
@@ -358,8 +337,7 @@ void handle_clearance(void)
 	if(r != 0xDEADBEEF){
 		clear_rows(max, min);
 		shift_rows(max+1, (max+1) - min);
-	}
-	
+	}	
 }
 
 void do_reset(void)

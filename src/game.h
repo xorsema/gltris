@@ -1,6 +1,12 @@
 #ifndef GAME_H
 #define GAME_H
 
+#define GRIDSZX 10
+#define GRIDSZY 22
+#define BLOCKSIZE 24
+
+#define TIMERDECRATE (.90)
+
 typedef struct player_info
 {
 	int		x, y;	/* X and Y of the origin of the player's piece */
@@ -29,5 +35,20 @@ enum
 	LEFT  = 1,
 	RIGHT = 2
 };
+
+typedef struct game_info
+{
+	int		gamestate;
+	bool		running;/* Is the game running? */
+	unsigned int	score;
+	unsigned int	level;
+} game_info_t;
+
+extern uint8_t g_blockgrid[GRIDSZX][GRIDSZY];
+extern game_info_t g_game;
+
+uint32_t delay_for_level(uint32_t);
+int get_next_piece(void);
+void regenerate_bag(void);
 
 #endif

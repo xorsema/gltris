@@ -19,10 +19,6 @@
 #include "text.h"
 #include "game.h"
 
-uint8_t g_blockgrid[GRIDSZX][GRIDSZY];
-
-game_info_t g_game;
-
 int gltris_init(void)
 {
 	if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
