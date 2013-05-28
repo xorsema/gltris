@@ -114,3 +114,8 @@ void get_text_size(const char *t, uint32_t *ow, uint32_t *oh)
 	*ow = w;
 	*oh = h;
 }
+
+void print_game_info(void)
+{
+	//...
+}

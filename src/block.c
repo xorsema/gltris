@@ -8,9 +8,7 @@
 #include "gltris.h"
 #include "block.h"
 #include "timer.h"
-
-player_info_t g_player;
-grabbag_t g_grabbag;
+#include "game.h"
 
 const uint8_t I_piece[4][4][4] = {
 

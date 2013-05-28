@@ -7,6 +7,7 @@
 
 #include "graphics.h"
 #include "block.h"
+#include "game.h"
 #include "gltris.h"
 
 SDL_Surface* g_display;

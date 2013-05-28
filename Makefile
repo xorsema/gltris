@@ -8,7 +8,7 @@ LINK = -lGL -lGLU -lm $(SDL_LDFLAGS) $(FT_LDFLAGS)
 VPATH = src/ : obj/
 OUT = bin/
 OBJ = obj/
-SRCS = gltris.c graphics.c input.c block.c timer.c text.c
+SRCS = gltris.c graphics.c input.c game.c block.c timer.c text.c
 
 .PHONY: all clean
 all: gltris

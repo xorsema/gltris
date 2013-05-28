@@ -17,6 +17,7 @@
 #include "block.h"
 #include "timer.h"
 #include "text.h"
+#include "game.h"
 
 uint8_t g_blockgrid[GRIDSZX][GRIDSZY];
 

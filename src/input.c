@@ -5,6 +5,7 @@
 #include "gltris.h"
 #include "timer.h"
 #include "block.h"
+#include "game.h"
 
 void handle_input(void)
 {
