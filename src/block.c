@@ -337,6 +337,7 @@ void handle_clearance(void)
 	if(r != 0xDEADBEEF){
 		clear_rows(max, min);
 		shift_rows(max+1, (max+1) - min);
+		handle_scoring(max - min);
 	}	
 }
 
@@ -357,6 +358,7 @@ void handle_placement(void)
 	g_player.type = NULL_PIECE;
 	g_player.piece.a = NULL;
 	handle_clearance();
+	modify_timer(g_fall_timer, delay_for_level(g_game.level));
 }
 
 /* Handle all movement of the player piece */

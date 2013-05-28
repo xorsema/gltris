@@ -5,7 +5,8 @@
 #define GRIDSZY 22
 #define BLOCKSIZE 24
 
-#define TIMERDECRATE (.90)
+#define TIMERDECRATE (.25)
+#define ROWSPERLEVEL 3
 
 typedef struct player_info
 {
@@ -40,6 +41,7 @@ typedef struct game_info
 {
 	int		gamestate;
 	bool		running;/* Is the game running? */
+	unsigned int    rows_cleared;
 	unsigned int	score;
 	unsigned int	level;
 } game_info_t;
@@ -50,5 +52,6 @@ extern game_info_t g_game;
 uint32_t delay_for_level(uint32_t);
 int get_next_piece(void);
 void regenerate_bag(void);
+void handle_scoring(uint32_t);
 
 #endif

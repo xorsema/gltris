@@ -44,3 +44,9 @@ int get_next_piece(void)
 	g_grabbag.index += 1;
 	return ret;
 }
+
+void handle_scoring(uint32_t cleared)
+{
+	g_game.rows_cleared += cleared;
+	g_game.level = g_game.rows_cleared / ROWSPERLEVEL;
+}

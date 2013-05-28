@@ -30,6 +30,7 @@ int gltris_init(void)
 		return 1;
 
 	memset(g_blockgrid, 0, sizeof(g_blockgrid));
+	memset(&g_game, 0, sizeof(game_info_t));
 	srand(time(NULL));
 
 	regenerate_bag();
