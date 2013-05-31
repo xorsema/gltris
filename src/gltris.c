@@ -40,12 +40,12 @@ int gltris_init(void)
 
 void gltris_loop()
 {
+	uint32_t w, h;
+
 	g_game.running = true;
 	g_game.gamestate = STATE_SPLASH;
 
 	g_fall_timer = add_timer(STARTINGTIME, NULL);
-
-	uint32_t w, h;
 
 	/* Main game loop */
 	while(g_game.running)

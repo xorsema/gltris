@@ -186,12 +186,15 @@ const uint8_t Z_piece[4][3][3] = {
 /* Check for collisions, returning NO_COLLISION if none have been found */
 int check_collisions(int inx, int iny, unsigned int inrot)
 {
-	int i, j, x, y, max, b, r;
-	bool isatype;
+	int	i, j;
+	int	x, y;
+	int	max; 
+	int	b;
+	int	r;
+	bool	isatype;
 
-	if(g_player.type == NULL_PIECE){
-		return NO_COLLISION;
-	}
+	if(g_player.type == NULL_PIECE)
+		return NO_COLLISION;	
 
 	isatype = (g_player.type == I_PIECE || g_player.type == O_PIECE);/* If it's a type a piece pointer or not */
 	max = isatype ? 4 : 3;/* the max size will be 4 or 3 depending on whether it's a 4x4 (a type) or 3x3 (b type) */
@@ -211,25 +214,25 @@ int check_collisions(int inx, int iny, unsigned int inrot)
 
 
 			/* Check collision with the wall on the x axis (right and left walls) */
-			if(x > (GRIDSZX - 1)){
+			if(x > (GRIDSZX - 1))
 				r |= COLLISION_RWALL;
-			} else  if(x < 0){
+			else  if(x < 0)
 				r |= COLLISION_LWALL;
-			}
+			
 
-			if(y == 0){
+			if(y == 0)
 				r |= TOUCHING_FLOOR;
-			}
+			
 
 			/* Check collision with the floor */
-			if(y < 0){
+			if(y < 0)
 				r |= COLLISION_FLOOR;
-			}
+			
 
 			/* Check collision with a placed block */
-			if(g_blockgrid[x][y] != 0){
+			if(g_blockgrid[x][y] != 0)
 				r |= COLLISION_BLOCK;
-			}
+			
 			
 			if(y > GRIDSZY-3)
 				r |= COLLISION_CEILING;
@@ -242,6 +245,7 @@ int check_collisions(int inx, int iny, unsigned int inrot)
 void set_piece(void)
 {
 	int i, j;
+
 	for(i = 0; i < PBLOCKMAX; i++)
 	{
 		for(j = 0; j < PBLOCKMAX; j++)
@@ -257,10 +261,12 @@ void set_piece(void)
 /* Check for any full rows, return the max and min as two 16bit ints in one 32 bit int */
 unsigned int check_rows(void)
 {
-	int i, j;
-	unsigned int result;
-	unsigned short int max, min;
-	bool fr, nfr = true, ms = false;
+	int			i, j;
+	unsigned int		result;
+	unsigned short int	max, min;
+	bool			fr;
+	bool			nfr = true;
+	bool			ms  = false;
 
 	for(j = 0; j < GRIDSZY; j++)
 	{
@@ -284,9 +290,9 @@ unsigned int check_rows(void)
 	}
 
 	/* If there were no full rows, return a constant to indicate failure */
-	if(nfr == true){
+	if(nfr == true)
 		result = 0xDEADBEEF;
-	} else {
+	else {
                 /* Store the max as the high 16 bits of result, and the min as the low 16 bits */
 		result = (max << 16);
 		result += (min & 0xFFFF);
@@ -298,6 +304,7 @@ unsigned int check_rows(void)
 void clear_rows(unsigned int high, unsigned int low)
 {
 	int i, j;
+
 	for(j = low; j != (high+1); j++)
 	{
 		for(i = 0; i < GRIDSZX; i++)
@@ -310,8 +317,8 @@ void clear_rows(unsigned int high, unsigned int low)
 /* Shift all rows from target up down by offset */
 void shift_rows(unsigned int target, unsigned int offset)
 {
-	int i, j;
-	unsigned int tb;
+	int		i, j;
+	unsigned int	tb;
 
 	for(j = target; j < GRIDSZY; j++)
 	{
@@ -327,8 +334,8 @@ void shift_rows(unsigned int target, unsigned int offset)
 /* If any rows have been completely filled, clear them, then move down the other blocks */
 void handle_clearance(void)
 {
-	unsigned int r;
-	unsigned short int max, min;
+	unsigned int		r;
+	unsigned short int	max, min;
 
 	r = check_rows();
 	max = (r >> 16);
@@ -367,9 +374,9 @@ void handle_placement(void)
 /* Handle all movement of the player piece */
 void do_movement(void)
 {
-	if(g_player.type != NULL_PIECE){
-		int c;
+	int c;
 
+	if(g_player.type != NULL_PIECE){
 		if(g_player.snap == true){
 			while(!(check_collisions(g_player.x, g_player.y, g_player.rotation) & TOUCHING_FLOOR) && !(check_collisions(g_player.x, g_player.y-1, g_player.rotation) & COLLISION_BLOCK))
 			{
@@ -407,7 +414,9 @@ void do_movement(void)
 /* Make sure the player piece isn't in a block/blocks */
 void fix_position(void)
 {
-	int c = check_collisions(g_player.x, g_player.y, g_player.rotation);
+	int c;
+
+	c = check_collisions(g_player.x, g_player.y, g_player.rotation);
 	if(c != NO_COLLISION && c != TOUCHING_FLOOR && c != COLLISION_CEILING){
 		if(c & COLLISION_RWALL)
 			g_player.x -= 1;
@@ -448,9 +457,8 @@ void handle_blocks(void)
 	do_movement();
 	do_rotation();
 
-	if(g_player.type == NULL_PIECE){
-		spawn_piece(get_next_piece());
-	}	
+	if(g_player.type == NULL_PIECE)
+		spawn_piece(get_next_piece());		
 }
 
 /* Give the player a new piece */

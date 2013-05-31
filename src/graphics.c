@@ -85,11 +85,12 @@ void graphics_render_block(int x, int y, const uint8_t* color)
 /* Render the player piece, which is separate from other pieces already placed */
 void graphics_render_player(void)
 {
+	int	i, j;
+	uint8_t b;
+
 	if(g_player.type == NULL_PIECE)
 		return;
 
-	int i, j;
-	uint8_t b;
 	for(i = 0; i < PBLOCKMAX; i++)
 	{
 		for(j = 0; j < PBLOCKMAX; j++)
@@ -100,7 +101,6 @@ void graphics_render_player(void)
 			}
 		}
 	}
-
 }
 
 /* Render our grid of blocks, using the piece colors array */
@@ -160,15 +160,15 @@ int surface_to_texture(SDL_Surface *s, GLuint *tn, bool free, GLenum fmt)
 	GLuint	result;
 
 	/* If the format isn't specified, attempt to guess it */
-	if(fmt != 0){
+	if(fmt != 0)
 		format = fmt;
-	} else if(s->format->BytesPerPixel == 3){
+	else if(s->format->BytesPerPixel == 3)
 		format = GL_RGB;
-	} else if(s->format->BytesPerPixel == 4){
+	else if(s->format->BytesPerPixel == 4)
 		format = GL_RGBA;
-	} else {
+	else 
 		return 1;
-	}
+	
 
 	glGenTextures(1, &result);
 	glBindTexture(GL_TEXTURE_2D, result);

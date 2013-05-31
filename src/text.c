@@ -39,9 +39,10 @@ int text_init(void)
 /* Expand the current bitmap to fit the GL_LUMINANCE_ALPHA format, essentially doubling the data */
 static void *expand_texture(void)
 {
-	int	 x, y, w, h;
-	GLubyte *nd; 
-	GLubyte *od; 
+	int	 x, y; 
+	int	 w, h;
+	GLubyte	*nd; 
+	GLubyte	*od; 
 	
 	nd = (GLubyte*)malloc(sizeof(GLubyte) * 2 * (face->glyph->bitmap.width) * (face->glyph->bitmap.rows));
 	memset(nd, 0, sizeof(GLubyte));
