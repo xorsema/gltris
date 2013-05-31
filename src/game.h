@@ -5,7 +5,7 @@
 #define GRIDSZY 22
 #define BLOCKSIZE 24
 
-#define TIMERDECRATE (.50)
+#define TIMERDECRATE (.80)
 #define ROWSPERLEVEL 5
 #define STARTINGTIME 1000
 
