@@ -38,8 +38,12 @@ void handle_input(void)
 						g_player.snap = true;
 						break;
 					
-					case SDLK_SPACE:
+					case SDLK_d:
 						g_player.rotate = RIGHT;
+						break;
+
+					case SDLK_a:
+						g_player.rotate = LEFT;
 						break;
 					}
 				}
