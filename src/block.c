@@ -402,16 +402,15 @@ void do_movement(void)
 		}
 	
 		if(g_fall_timer->elapsed == true){/* If on this frame we should move the piece down and there haven't been any collisions between the piece and a block/the ground */
-			if(!(check_collisions(g_player.x, g_player.y, g_player.rotation) & TOUCHING_FLOOR) && !(check_collisions(g_player.x, g_player.y-1, g_player.rotation) & COLLISION_BLOCK)){
+			if(!(check_collisions(g_player.x, g_player.y, g_player.rotation) & TOUCHING_FLOOR) && !(check_collisions(g_player.x, g_player.y-1, g_player.rotation) & COLLISION_BLOCK))
 				g_player.y -= 1;
-			} else {
+			else 
 				handle_placement();
-			}
 		}
 	}
 }
 
-/* Make sure the player piece isn't in a block/blocks */
+/* Make sure the player piece isn't in the wall or the _in_ floor (touching the floor is fine) */
 void fix_position(void)
 {
 	int c;
@@ -424,29 +423,47 @@ void fix_position(void)
 			g_player.x += 1;
 		if(c & COLLISION_FLOOR)
 			g_player.y += 1;
-		if(c & COLLISION_BLOCK)
-			g_player.y += 1;
 		fix_position();		
 	}
 }
 
-/* Rotate our player piece if g_player.rotate is set */
+/* Check whether the rotation is valid (if there are no unacceptable collisions) */
+bool check_rotation(int rotation)
+{
+	int c;
+
+	c = check_collisions(g_player.x, g_player.y, rotation);
+	if(c != NO_COLLISION && c != TOUCHING_FLOOR && c != COLLISION_CEILING && c != COLLISION_RWALL && c != COLLISION_LWALL)
+		return false;
+
+	return true;
+}
+
+/* Rotate our player piece if g_player.rotate is set, and rotating is valid */
 void do_rotation(void)
 {
+	int r;
+
 	switch(g_player.rotate)
 	{
 	case NONE:
 		break;
 	case RIGHT:
-		g_player.rotation = (g_player.rotation == 3) ? 0 : g_player.rotation + 1;
-		g_player.rotate = NONE;
+	{
+		r = (g_player.rotation == 3) ? 0 : g_player.rotation + 1;
+		g_player.rotation = (check_rotation(r)) ? r : g_player.rotation;
 		fix_position();
+		g_player.rotate = NONE;
 		break;
+	}
 	case LEFT:
-		g_player.rotation = (g_player.rotation == 0) ? 3 : g_player.rotation - 1;
-		g_player.rotate = NONE;
+	{
+		r = (g_player.rotation == 0) ? 3 : g_player.rotation - 1;
+		g_player.rotation = (check_rotation(r)) ? r : g_player.rotation;
 		fix_position();
+		g_player.rotate = NONE;
 		break;
+	}
 	}
 
 }
