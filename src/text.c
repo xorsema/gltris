@@ -133,13 +133,13 @@ void print_game_info(void)
 	char buf[100];
 	unsigned int w, h, t;
 
-	sprintf(buf, "%i", g_game.level);
-	get_text_size(buf, 32, &w, &h);
+	sprintf(buf, "Level %i", g_game.level);
+	get_text_size(buf, 24, &w, &h);
 	glColor3f(1.0, 1.0, 1.0);
-	text_print(WWIDTH-w, WHEIGHT-h, 32, buf);
+	text_print(WWIDTH-w, WHEIGHT-h, 24, buf);
 	t = h;
 
-	sprintf(buf, "%i", g_game.rows_cleared);
-	get_text_size(buf, 32, &w, &h);
-	text_print(WWIDTH-w, WHEIGHT-h-t-10, 32, buf);
+	sprintf(buf, "Rows %i", g_game.rows_cleared);
+	get_text_size(buf, 24, &w, &h);
+	text_print(WWIDTH-w, WHEIGHT-h-t-10, 24, buf);
 }
