@@ -1,6 +1,10 @@
-Goals:
+GLtris
+======
 
-a simple tetris game with:
+Goals:
+------
+
+A simple tetris game with:
 
 - fixed resolution
 
@@ -8,7 +12,7 @@ a simple tetris game with:
 
 - keyboard input
 
-- text rendering with SDL_ttf
+- text rendering with Freetype
 
 - scoring
 
@@ -16,21 +20,20 @@ a simple tetris game with:
 
 Notes:
 
-Collision of blocks will be done with a map of block locations in an array, everytime the block about to be placed moves down, the new location will be checked first.
+* Collision of blocks will be done with a map of block locations in an array, everytime the block about to be placed moves down, the new location will be checked first.
 
-In order to conform to the Tetris guidelines, resolution is 480x480 with the side menu filling the right portion of the screen and the game filling the left
+* In order to conform to the Tetris guidelines, resolution is 480x480 with the side menu filling the right portion of the screen and the game filling the left the grid is 10x22 with 2 of the 22 hidden at the top
 
-the grid is 10x22 with 2 of the 22 hidden at the top
+* Each block is therefore 24x24
 
-each block is therefore 24x24
+TODO (now in order of priority):
+--------------------------------
 
-TODO (Now in order of priority):
-
-Rotation - DONE!
-Wall kicks - DONE!
-row clearance - DONE!
-Game reset on failure (no more room) - Mostly done.
-Levels/speed changes
-scoring
-Side menu
-background?
+* Rotation - DONE!
+* Wall kicks - DONE!
+* Row clearance - DONE!
+* Game reset on failure (no more room) - DONE!.
+* Levels/speed changes - DONE!
+* scoring
+* Side menu
+* background?
