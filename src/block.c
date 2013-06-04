@@ -183,24 +183,6 @@ const uint8_t Z_piece[4][3][3] = {
 	}
 };
 
-/* Get a block from a specified piece, if the x and y given are too large, return false and don't touch "out" */
-bool get_block_safe(int *out, unsigned int x, unsigned int y, int type, int rot)
-{
-	int		size;
-	int		result;
-	piece_ptr_t	piece;
-
-	size = ((type == I_PIECE || type == O_PIECE) ? 4 : 3);
-	
-	if((x >= size) || (y >= size))
-		return false;/* Return false if the coordinates are larger than the piece */
-
-	piece = block_pointer_from_type(type);
-
-	*out = ((type == I_PIECE || type == O_PIECE) ? (*piece.a)[rot][y][x] : (*piece.b)[rot][y][x]);/* Give us a our block byte */
-	return true;/* Then return true since we got what we needed */
-}
-
 /* Return a proper piece_ptr_t for the given type of piece, which contains the data*/
 piece_ptr_t block_pointer_from_type(int type)
 {

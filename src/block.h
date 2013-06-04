@@ -1,8 +1,10 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
-#define PBLOCKMAX ((g_player.type == I_PIECE || g_player.type == O_PIECE) ? 4 : 3)
-#define get_player_block(x, y) ((g_player.type == I_PIECE || g_player.type == O_PIECE) ? (*g_player.piece.a)[g_player.rotation][y][x] : (*g_player.piece.b)[g_player.rotation][y][x])
+#define get_piece_size(piece) (((piece) == I_PIECE || (piece) == O_PIECE) ? 4 : 3)
+#define PBLOCKMAX get_piece_size(g_player.type)
+#define get_block(x, y, rot, type, piece) ((type == I_PIECE || type == O_PIECE) ? (*(piece).a)[rot][y][x] : (*(piece).b)[rot][y][x])
+#define get_player_block(x, y) get_block(x, y, g_player.rotation, g_player.type, g_player.piece)
 
 typedef enum collision
 {
@@ -40,6 +42,5 @@ void clear_player(void);
 void do_wallkicks(void);
 int check_collisions(int, int, unsigned int);
 piece_ptr_t block_pointer_from_type(int);
-bool get_block_safe(int *, unsigned int, unsigned int, int, int);
 
 #endif

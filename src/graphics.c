@@ -88,30 +88,35 @@ void graphics_render_grid_block(int x, int y, const uint8_t* color)
 	graphics_render_block(x * BLOCKSIZE, y * BLOCKSIZE, color); /* x/y position is the size of the block multiplied by the position in the grid */
 }
 
+/* Render a piece in an arbitrary location */
 void graphics_render_piece(float x, float y, unsigned int type, unsigned int inrot)
 {
-        //...
+        int		i, j;
+	int		b;
+	int		max;
+	piece_ptr_t	piece;
+	
+	max   = get_piece_size(type);
+	piece = block_pointer_from_type(type);
+
+	for(j = 0; j < max; j++)
+	{
+		for(i = 0; i < max; i++)
+		{
+			b = get_block(i, j, inrot, type, piece);
+			if(b != 0)
+				graphics_render_block((i*BLOCKSIZE)+x, (j*BLOCKSIZE)+y, &g_piece_colors[b*3]);
+		}
+	}
 }
 
 /* Render the player piece, which is separate from other pieces already placed */
 void graphics_render_player(void)
 {
-	int	i, j;
-	uint8_t b;
-
 	if(g_player.type == NULL_PIECE)
 		return;
 
-	for(i = 0; i < PBLOCKMAX; i++)
-	{
-		for(j = 0; j < PBLOCKMAX; j++)
-		{
-			b = get_player_block(i, j);
-			if(b != 0){
-				graphics_render_grid_block(i+g_player.x, j+g_player.y, &g_piece_colors[b*3]);
-			}
-		}
-	}
+	graphics_render_piece(g_player.x*BLOCKSIZE, g_player.y*BLOCKSIZE, g_player.type, g_player.rotation);
 }
 
 /* Render our grid of blocks, using the piece colors array */
