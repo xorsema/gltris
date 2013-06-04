@@ -4,13 +4,6 @@
 #define PBLOCKMAX ((g_player.type == I_PIECE || g_player.type == O_PIECE) ? 4 : 3)
 #define get_player_block(x, y) ((g_player.type == I_PIECE || g_player.type == O_PIECE) ? (*g_player.piece.a)[g_player.rotation][y][x] : (*g_player.piece.b)[g_player.rotation][y][x])
 
-void handle_blocks(void);
-void do_collisions(void);
-void spawn_piece(unsigned int);
-void clear_player(void);
-void do_wallkicks(void);
-int check_collisions(int, int, unsigned int);
-
 typedef enum collision
 {
 	NO_COLLISION	  = 0,
@@ -40,5 +33,13 @@ typedef union piece_ptr
 	uint8_t (*b)[4][3][3];
 } piece_ptr_t;
 
+void handle_blocks(void);
+void do_collisions(void);
+void spawn_piece(unsigned int);
+void clear_player(void);
+void do_wallkicks(void);
+int check_collisions(int, int, unsigned int);
+piece_ptr_t block_pointer_from_type(int);
+bool get_block_safe(int *, unsigned int, unsigned int, int, int);
 
 #endif

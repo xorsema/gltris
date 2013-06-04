@@ -183,6 +183,56 @@ const uint8_t Z_piece[4][3][3] = {
 	}
 };
 
+/* Get a block from a specified piece, if the x and y given are too large, return false and don't touch "out" */
+bool get_block_safe(int *out, unsigned int x, unsigned int y, int type, int rot)
+{
+	int		size;
+	int		result;
+	piece_ptr_t	piece;
+
+	size = ((type == I_PIECE || type == O_PIECE) ? 4 : 3);
+	
+	if((x >= size) || (y >= size))
+		return false;/* Return false if the coordinates are larger than the piece */
+
+	piece = block_pointer_from_type(type);
+
+	*out = ((type == I_PIECE || type == O_PIECE) ? (*piece.a)[rot][y][x] : (*piece.b)[rot][y][x]);/* Give us a our block byte */
+	return true;/* Then return true since we got what we needed */
+}
+
+/* Return a proper piece_ptr_t for the given type of piece, which contains the data*/
+piece_ptr_t block_pointer_from_type(int type)
+{
+	piece_ptr_t r;
+
+	switch(type)
+	{
+	case I_PIECE:
+		r.a = (uint8_t (*)[4][4][4])&I_piece;
+		break;
+	case O_PIECE:
+		r.a = (uint8_t (*)[4][4][4])&O_piece;
+		break;
+	case J_PIECE:
+		r.b = (uint8_t (*)[4][3][3])&J_piece;
+		break;
+	case L_PIECE:
+		r.b = (uint8_t (*)[4][3][3])&L_piece;
+		break;
+	case S_PIECE:
+		r.b = (uint8_t (*)[4][3][3])&S_piece;
+		break;
+	case T_PIECE:
+		r.b = (uint8_t (*)[4][3][3])&T_piece;
+		break;
+	case Z_PIECE:
+		r.b = (uint8_t (*)[4][3][3])&Z_piece;
+		break;
+	}
+	return r;
+}
+
 /* Check for collisions, returning NO_COLLISION if none have been found */
 int check_collisions(int inx, int iny, unsigned int inrot)
 {
@@ -488,28 +538,5 @@ void spawn_piece(unsigned int id)
 	g_player.rotate = NONE;
 	g_player.move = NONE;
 	g_player.snap = false;
-	switch(id)
-	{
-	case I_PIECE:
-		g_player.piece.a = (uint8_t (*)[4][4][4])&I_piece;
-		break;
-	case O_PIECE:
-		g_player.piece.a = (uint8_t (*)[4][4][4])&O_piece;
-		break;
-	case J_PIECE:
-		g_player.piece.b = (uint8_t (*)[4][3][3])&J_piece;
-		break;
-	case L_PIECE:
-		g_player.piece.b = (uint8_t (*)[4][3][3])&L_piece;
-		break;
-	case S_PIECE:
-		g_player.piece.b = (uint8_t (*)[4][3][3])&S_piece;
-		break;
-	case T_PIECE:
-		g_player.piece.b = (uint8_t (*)[4][3][3])&T_piece;
-		break;
-	case Z_PIECE:
-		g_player.piece.b = (uint8_t (*)[4][3][3])&Z_piece;
-		break;
-	}
+	g_player.piece = block_pointer_from_type(g_player.type);
 }

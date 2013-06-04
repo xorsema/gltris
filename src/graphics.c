@@ -62,12 +62,12 @@ void graphics_end_frame(void)
 	SDL_GL_SwapBuffers();
 }
 
-/* Must be called within a proper OpenGL context, renders a block in a grid of blocks (as in g_blockgrid) */
-void graphics_render_block(int x, int y, const uint8_t* color)
+/* Render a block in an arbitrary location on the screen, must be called within a proper OpenGL context */
+void graphics_render_block(float x, float y, const uint8_t* color)
 {
 	glPushMatrix(); /* Save the matrix so other stuff doesn't get messed up */
 	
-	glTranslatef((x * BLOCKSIZE), (y * BLOCKSIZE), 0.0f); /* Move to the proper position in the grid */
+	glTranslatef(x, y, 0.0f); /* Move to the proper position */
 	glScalef(BLOCKSIZE, BLOCKSIZE, 0.0f); /* set size (in pixels because of gluOrtho2d) */
 	glColor3ubv(color); /* Make sure we're drawing in the proper color */
 	
@@ -80,6 +80,17 @@ void graphics_render_block(int x, int y, const uint8_t* color)
 	glEnd();
 
 	glPopMatrix(); /* Restore the matrix we saved previously */
+}
+
+/* Must be called within a proper OpenGL context, renders a block in a grid of blocks (as in g_blockgrid) */
+void graphics_render_grid_block(int x, int y, const uint8_t* color)
+{
+	graphics_render_block(x * BLOCKSIZE, y * BLOCKSIZE, color); /* x/y position is the size of the block multiplied by the position in the grid */
+}
+
+void graphics_render_piece(float x, float y, unsigned int type, unsigned int inrot)
+{
+        //...
 }
 
 /* Render the player piece, which is separate from other pieces already placed */
@@ -97,7 +108,7 @@ void graphics_render_player(void)
 		{
 			b = get_player_block(i, j);
 			if(b != 0){
-				graphics_render_block(i+g_player.x, j+g_player.y, &g_piece_colors[b*3]);
+				graphics_render_grid_block(i+g_player.x, j+g_player.y, &g_piece_colors[b*3]);
 			}
 		}
 	}
@@ -114,7 +125,7 @@ void graphics_render_blockgrid(void)
 		for(j = 0; j < GRIDSZY; j++)
 		{
 			if((b = g_blockgrid[i][j]) != 0){
-				graphics_render_block(i, j, &g_piece_colors[b*3]); 
+				graphics_render_grid_block(i, j, &g_piece_colors[b*3]); 
 			}
 		}
 		
