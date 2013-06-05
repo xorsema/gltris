@@ -83,6 +83,10 @@ void gltris_loop()
 			text_print((WWIDTH-w)/2, (WHEIGHT-h)/2 - 50, 16, SPLASHTXT);
 			break;
 
+		case STATE_PAUSE:
+			get_text_size(PAUSETXT, 16, &w, &h);
+			text_print((WWIDTH-w)/2, (WHEIGHT-h)/2, 16, PAUSETXT);
+
 		default:
 			break;
 		}

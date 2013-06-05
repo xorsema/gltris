@@ -5,6 +5,7 @@
 #define PBLOCKMAX get_piece_size(g_player.type)
 #define get_block(x, y, rot, type, piece) ((type == I_PIECE || type == O_PIECE) ? (*(piece).a)[rot][y][x] : (*(piece).b)[rot][y][x])
 #define get_player_block(x, y) get_block(x, y, g_player.rotation, g_player.type, g_player.piece)
+#define NOFULLROWS 0xDEADBEEF
 
 typedef enum collision
 {

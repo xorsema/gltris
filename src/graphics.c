@@ -129,9 +129,8 @@ void graphics_render_blockgrid(void)
 	{
 		for(j = 0; j < GRIDSZY; j++)
 		{
-			if((b = g_blockgrid[i][j]) != 0){
+			if((b = g_blockgrid[i][j]) != 0)
 				graphics_render_grid_block(i, j, &g_piece_colors[b*3]); 
-			}
 		}
 		
 	}

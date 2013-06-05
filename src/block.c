@@ -244,27 +244,22 @@ int check_collisions(int inx, int iny, unsigned int inrot)
 			if(b == 0)/* Don't bother checking when it's null block */
 				continue;
 
-
 			/* Check collision with the wall on the x axis (right and left walls) */
 			if(x > (GRIDSZX - 1))
 				r |= COLLISION_RWALL;
 			else  if(x < 0)
 				r |= COLLISION_LWALL;
-			
 
 			if(y == 0)
 				r |= TOUCHING_FLOOR;
 			
-
 			/* Check collision with the floor */
 			if(y < 0)
 				r |= COLLISION_FLOOR;
 			
-
 			/* Check collision with a placed block */
 			if(g_blockgrid[x][y] != 0)
-				r |= COLLISION_BLOCK;
-			
+				r |= COLLISION_BLOCK;			
 			
 			if(y > GRIDSZY-3)
 				r |= COLLISION_CEILING;
@@ -323,7 +318,7 @@ unsigned int check_rows(void)
 
 	/* If there were no full rows, return a constant to indicate failure */
 	if(nfr == true)
-		result = 0xDEADBEEF;
+		result = NOFULLROWS;
 	else {
                 /* Store the max as the high 16 bits of result, and the min as the low 16 bits */
 		result = (max << 16);
@@ -373,7 +368,7 @@ void handle_clearance(void)
 	max = (r >> 16);
 	min = r & 0xFFFF;
 
-	if(r != 0xDEADBEEF){
+	if(r != NOFULLROWS){
 		clear_rows(max, min);
 		shift_rows(max+1, (max+1) - min);
 		handle_scoring((max+1) - min);
@@ -409,6 +404,7 @@ void do_movement(void)
 	int c;
 
 	if(g_player.type != NULL_PIECE){
+		/* If the button to snap the piece down was pressed, move it down until it collides with something, and then place it */
 		if(g_player.snap == true){
 			while(!(check_collisions(g_player.x, g_player.y, g_player.rotation) & TOUCHING_FLOOR) && !(check_collisions(g_player.x, g_player.y-1, g_player.rotation) & COLLISION_BLOCK))
 			{
@@ -418,6 +414,7 @@ void do_movement(void)
 			handle_placement();
 		}
 
+		/* Move the piece left if the correct button has been pressed */
 		if(g_player.move == LEFT){
 			c = check_collisions(g_player.x - 1, g_player.y, g_player.rotation);
 			if(!(c & COLLISION_BLOCK) && !(c & COLLISION_LWALL)){
@@ -425,6 +422,8 @@ void do_movement(void)
 				g_player.move = NONE;
 			}
 		}
+
+		/* Do the same with the right */
 		if(g_player.move == RIGHT){
 			c = check_collisions(g_player.x + 1, g_player.y, g_player.rotation);
 			if(!(c & COLLISION_BLOCK) && !(c & COLLISION_RWALL)){
@@ -433,6 +432,7 @@ void do_movement(void)
 			}
 		}
 	
+		/* Apply "gravity" to the piece, if the timer has elapsed, if the piece is as far down as possible, place it */
 		if(g_fall_timer->elapsed == true){/* If on this frame we should move the piece down and there haven't been any collisions between the piece and a block/the ground */
 			if(!(check_collisions(g_player.x, g_player.y, g_player.rotation) & TOUCHING_FLOOR) && !(check_collisions(g_player.x, g_player.y-1, g_player.rotation) & COLLISION_BLOCK))
 				g_player.y -= 1;

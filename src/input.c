@@ -23,6 +23,13 @@ void handle_input(void)
 				break;
 				
 			case SDL_KEYDOWN:
+				switch(event.key.keysym.sym)
+				{
+				case SDLK_ESCAPE:
+					pause_timer(g_fall_timer);
+					g_game.gamestate = STATE_PAUSE;
+					break;
+				}
 				if(g_player.type != NULL_PIECE){
 					switch(event.key.keysym.sym)
 					{
@@ -58,7 +65,7 @@ void handle_input(void)
 				break;
 			}
 			break;
-
+			
 		case STATE_SPLASH:
 			switch(event.type)
 			{
@@ -69,6 +76,23 @@ void handle_input(void)
 				switch(event.key.keysym.sym)
 				{
 				case SDLK_RETURN:
+					g_game.gamestate = STATE_GAME;
+					break;
+				}
+			}
+			break;
+
+		case STATE_PAUSE:
+			switch(event.type)
+			{
+			case SDL_QUIT:
+				g_game.running = false;
+				break;
+			case SDL_KEYDOWN:
+				switch(event.key.keysym.sym)
+				{
+				case SDLK_ESCAPE:
+					resume_timer(g_fall_timer);
 					g_game.gamestate = STATE_GAME;
 					break;
 				}
