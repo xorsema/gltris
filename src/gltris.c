@@ -89,6 +89,7 @@ void gltris_loop()
 			break;
 
 		case STATE_PAUSE:
+			glColor3f(1.0f, 1.0f, 1.0f);
 			get_text_size(PAUSETXT, 16, &w, &h);
 			text_print((WWIDTH-w)/2, (WHEIGHT-h)/2, 16, PAUSETXT);
 
