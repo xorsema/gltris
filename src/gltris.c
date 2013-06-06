@@ -77,6 +77,8 @@ void gltris_loop()
 
 			graphics_render_piece_preview();
 
+			graphics_render_ghost_piece();
+
 			break;
 			
 		case STATE_SPLASH:

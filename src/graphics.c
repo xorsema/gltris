@@ -63,13 +63,19 @@ void graphics_end_frame(void)
 }
 
 /* Render a block in an arbitrary location on the screen, must be called within a proper OpenGL context */
-void graphics_render_block(float x, float y, const uint8_t* color)
+void graphics_render_block(float x, float y, const uint8_t* color, bool ghost)
 {
 	glPushMatrix(); /* Save the matrix so other stuff doesn't get messed up */
 	
 	glTranslatef(x, y, 0.0f); /* Move to the proper position */
 	glScalef(BLOCKSIZE, BLOCKSIZE, 0.0f); /* set size (in pixels because of gluOrtho2d) */
-	glColor3ubv(color); /* Make sure we're drawing in the proper color */
+
+	if(ghost)
+		glColor4ub(color[0], color[1], color[2], GHOSTTRANS); 
+	else
+		glColor3ubv(color); /* Make sure we're drawing in the proper color */
+
+	glEnable(GL_BLEND);
 	
 	/* Render our block with GL_QUADS */
 	glBegin(GL_QUADS);
@@ -79,17 +85,19 @@ void graphics_render_block(float x, float y, const uint8_t* color)
 	glVertex2i(0, 1);
 	glEnd();
 
+	glDisable(GL_BLEND);
+
 	glPopMatrix(); /* Restore the matrix we saved previously */
 }
 
 /* Must be called within a proper OpenGL context, renders a block in a grid of blocks (as in g_blockgrid) */
 void graphics_render_grid_block(int x, int y, const uint8_t* color)
 {
-	graphics_render_block(x * BLOCKSIZE, y * BLOCKSIZE, color); /* x/y position is the size of the block multiplied by the position in the grid */
+	graphics_render_block(x * BLOCKSIZE, y * BLOCKSIZE, color, false); /* x/y position is the size of the block multiplied by the position in the grid */
 }
 
 /* Render a piece in an arbitrary location */
-void graphics_render_piece(float x, float y, unsigned int type, unsigned int inrot)
+void graphics_render_piece(float x, float y, unsigned int type, unsigned int inrot, bool ghost)
 {
         int		i, j;
 	int		b;
@@ -105,7 +113,7 @@ void graphics_render_piece(float x, float y, unsigned int type, unsigned int inr
 		{
 			b = get_block(i, j, inrot, type, piece);
 			if(b != 0)
-				graphics_render_block((i*BLOCKSIZE)+x, (j*BLOCKSIZE)+y, &g_piece_colors[b*3]);
+				graphics_render_block((i*BLOCKSIZE)+x, (j*BLOCKSIZE)+y, &g_piece_colors[b*3], ghost);
 		}
 	}
 }
@@ -116,7 +124,7 @@ void graphics_render_player(void)
 	if(g_player.type == NULL_PIECE)
 		return;
 
-	graphics_render_piece(g_player.x*BLOCKSIZE, g_player.y*BLOCKSIZE, g_player.type, g_player.rotation);
+	graphics_render_piece(g_player.x*BLOCKSIZE, g_player.y*BLOCKSIZE, g_player.type, g_player.rotation, false);
 }
 
 void graphics_render_piece_preview(void)
@@ -124,7 +132,15 @@ void graphics_render_piece_preview(void)
 	int p;
 	
 	p = peek_piece();
-	graphics_render_piece(WWIDTH - 4*BLOCKSIZE, WHEIGHT - 200, p, 1);
+	graphics_render_piece(WWIDTH - 4*BLOCKSIZE, WHEIGHT - 200, p, 1, false);
+}
+
+void graphics_render_ghost_piece(void)
+{
+	unsigned int x, y;
+
+	get_ghost_info(&x, &y);
+	graphics_render_piece(x * BLOCKSIZE, y * BLOCKSIZE, g_player.type, g_player.rotation, true);
 }
 
 /* Render our grid of blocks, using the piece colors array */

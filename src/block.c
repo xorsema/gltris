@@ -497,7 +497,22 @@ void do_rotation(void)
 		break;
 	}
 	}
+}
 
+void get_ghost_info(unsigned int *ox, unsigned int *oy)
+{
+	unsigned int x, y;
+
+	x = g_player.x;
+	y = g_player.y;
+
+	while(!(check_collisions(x, y, g_player.rotation) & TOUCHING_FLOOR) && !(check_collisions(x, y-1, g_player.rotation) & COLLISION_BLOCK))
+	{
+		y -= 1;
+	}
+	
+	*ox = x;
+	*oy = y;
 }
 
 /* Take care of piece/block mechanics */
