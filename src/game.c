@@ -56,7 +56,7 @@ int get_piece(void)
 int peek_piece(void)
 {
 	/* If the index is 7, get_piece hasn't been called again, so we need to get the next piece from the sec pool */
-	return (g_pool.index == 7) ? (g_pool.sec[0]) : (g_pool.prim[g_pool.index]);
+	return (g_pool.index == 6) ? (g_pool.sec[0]) : (g_pool.prim[g_pool.index]);
 }
 
 void handle_scoring(uint32_t cleared)
