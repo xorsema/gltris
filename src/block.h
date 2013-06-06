@@ -42,7 +42,7 @@ void spawn_piece(unsigned int);
 void clear_player(void);
 void do_wallkicks(void);
 int check_collisions(int, int, unsigned int);
-void get_ghost_info(unsigned int *, unsigned int *);
+void get_ghost_info(int *, int *);
 piece_ptr_t block_pointer_from_type(int);
 
 #endif

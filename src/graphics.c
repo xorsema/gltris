@@ -137,7 +137,7 @@ void graphics_render_piece_preview(void)
 
 void graphics_render_ghost_piece(void)
 {
-	unsigned int x, y;
+	int x, y;
 
 	get_ghost_info(&x, &y);
 	graphics_render_piece(x * BLOCKSIZE, y * BLOCKSIZE, g_player.type, g_player.rotation, true);
