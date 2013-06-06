@@ -70,14 +70,14 @@ void gltris_loop()
 			/* graphics.c: renders the player's piece */
 			graphics_render_player();
 			
+			graphics_render_ghost_piece();
+
 			/* graphics.c: renders the blocks */
 			graphics_render_blockgrid();
 
 			print_game_info();
 
 			graphics_render_piece_preview();
-
-			graphics_render_ghost_piece();
 
 			break;
 			

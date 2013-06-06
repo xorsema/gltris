@@ -4,7 +4,7 @@ FT_CFLAGS = $(shell freetype-config --cflags)
 SDL_LDFLAGS = $(shell sdl-config --libs)
 FT_LDFLAGS = $(shell freetype-config --libs)
 CFLAGS = -std=c99 -g $(SDL_CFLAGS) $(FT_CFLAGS)
-LINK = -lGL -lGLU -lm $(SDL_LDFLAGS) $(FT_LDFLAGS)
+LINK = -lGL -lGLU -lm  $(SDL_LDFLAGS) $(FT_LDFLAGS)
 VPATH = src/ : obj/
 OUT = bin/
 OBJ = obj/

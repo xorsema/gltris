@@ -99,6 +99,7 @@ void text_print(float x, float y, unsigned int size, char *t)
 
 		text_gen_texture(&texname);
 		render_textured_quad(texname, x+pen_x, y+pen_y, (face->glyph->bitmap).width, (face->glyph->bitmap).rows);
+		glDeleteTextures(1, &texname);
 
 		pen_x += face->glyph->advance.x >> 6;
 		pen_y += face->glyph->advance.y >> 6;

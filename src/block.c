@@ -502,7 +502,7 @@ void do_rotation(void)
 void get_ghost_info(unsigned int *ox, unsigned int *oy)
 {
 	unsigned int x, y;
-
+	
 	x = g_player.x;
 	y = g_player.y;
 
