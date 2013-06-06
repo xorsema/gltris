@@ -33,7 +33,8 @@ int gltris_init(void)
 	memset(&g_game, 0, sizeof(game_info_t));
 	srand(time(NULL));
 
-	regenerate_bag();
+	fill_pool(g_pool.prim);
+	fill_pool(g_pool.sec);
 	
 	return 0;
 }
@@ -73,6 +74,8 @@ void gltris_loop()
 			graphics_render_blockgrid();
 
 			print_game_info();
+
+			graphics_render_piece_preview();
 
 			break;
 			

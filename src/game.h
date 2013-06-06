@@ -21,15 +21,15 @@ typedef struct player_info
 	bool		snap;	/* Should we snap the piece down? */
 } player_info_t;
 
-typedef struct grabbag
+typedef struct piece_pool
 {
-	unsigned int	pieces[7];
+	unsigned int	prim[7];
+	unsigned int    sec[7];
 	unsigned int	index;
-	unsigned int	npiece;
-} grabbag_t;
+} piece_pool_t;
 
 extern player_info_t g_player;
-extern grabbag_t g_grabbag;
+extern piece_pool_t g_pool;
 
 enum
 {
@@ -51,8 +51,9 @@ extern uint8_t g_blockgrid[GRIDSZX][GRIDSZY];
 extern game_info_t g_game;
 
 uint32_t delay_for_level(uint32_t);
-int get_next_piece(void);
-void regenerate_bag(void);
+int get_piece(void);
+int peek_piece(void);
+void fill_pool(unsigned int*);
 void handle_scoring(uint32_t);
 
 #endif

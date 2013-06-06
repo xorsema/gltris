@@ -119,6 +119,14 @@ void graphics_render_player(void)
 	graphics_render_piece(g_player.x*BLOCKSIZE, g_player.y*BLOCKSIZE, g_player.type, g_player.rotation);
 }
 
+void graphics_render_piece_preview(void)
+{
+	int p;
+	
+	p = peek_piece();
+	graphics_render_piece(WWIDTH - 4*BLOCKSIZE, WHEIGHT - 200, p, 0);
+}
+
 /* Render our grid of blocks, using the piece colors array */
 void graphics_render_blockgrid(void)
 {

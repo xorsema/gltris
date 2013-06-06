@@ -378,7 +378,7 @@ void handle_clearance(void)
 void do_reset(void)
 {
 	clear_rows(GRIDSZY-1, 0);
-	spawn_piece(get_next_piece());
+	spawn_piece(get_piece());
 	g_game.level = 0;
 	g_game.rows_cleared = 0;
 	modify_timer(g_fall_timer, STARTINGTIME);
@@ -507,7 +507,7 @@ void handle_blocks(void)
 	do_rotation();
 
 	if(g_player.type == NULL_PIECE)
-		spawn_piece(get_next_piece());		
+		spawn_piece(get_piece());		
 }
 
 /* Give the player a new piece */

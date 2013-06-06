@@ -11,7 +11,7 @@
 #include "game.h"
 
 player_info_t g_player;
-grabbag_t g_grabbag;
+piece_pool_t g_pool;
 
 uint8_t g_blockgrid[GRIDSZX][GRIDSZY];
 game_info_t g_game;
@@ -25,30 +25,38 @@ uint32_t delay_for_level(uint32_t level)
 	return (ms < 1) ? 1 : (uint32_t)ms;
 }
 
-void regenerate_bag(void)
+void fill_pool(unsigned int *p)
 {
-	int i, max, min;
-
-	max = Z_PIECE;
-	min = I_PIECE;
+	int i;
 
 	for(i = 0; i < 7; i++)
 	{
-		g_grabbag.pieces[i] = rand() % (max-min+1)+min;
-	}	
-
-	g_grabbag.index = 0;
+		p[i] = rand() % (Z_PIECE-I_PIECE+1)+I_PIECE;
+	}
 }
 
-int get_next_piece(void)
+int get_piece(void)
 {
 	int ret;
 
-	if(g_grabbag.index > 6)
-		regenerate_bag();
-	ret = g_grabbag.pieces[g_grabbag.index];
-	g_grabbag.index += 1;
+	/* If we've reached the end (7 - 1) */
+	if(g_pool.index == 6){
+		g_pool.index = 0;/* Start over at the beginning */
+		memcpy(g_pool.prim, g_pool.sec, 7*sizeof(unsigned int));/* Copy over the sec pool into the prim */
+		fill_pool(g_pool.sec);/* Refill the sec pool */
+	}
+
+	ret = g_pool.prim[g_pool.index];
+
+	g_pool.index++;
+
 	return ret;
+}
+
+int peek_piece(void)
+{
+	/* If the index is 7, get_piece hasn't been called again, so we need to get the next piece from the sec pool */
+	return (g_pool.index == 7) ? (g_pool.sec[0]) : (g_pool.prim[g_pool.index]);
 }
 
 void handle_scoring(uint32_t cleared)
