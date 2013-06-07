@@ -414,6 +414,11 @@ void do_movement(void)
 			handle_placement();
 		}
 
+		/* No point in rotating a perfectly square piece, just set this to none */
+		if(g_player.type == O_PIECE){
+			g_player.rotate = NONE;
+		}
+
 		/* Move the piece left if the correct button has been pressed */
 		if(g_player.move == LEFT){
 			c = check_collisions(g_player.x - 1, g_player.y, g_player.rotation);
