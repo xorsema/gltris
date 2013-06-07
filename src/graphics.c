@@ -62,22 +62,23 @@ void graphics_end_frame(void)
 	SDL_GL_SwapBuffers();
 }
 
-/* Render a block in an arbitrary location on the screen, must be called within a proper OpenGL context */
-void graphics_render_block(float x, float y, const uint8_t* color, bool ghost)
+/* Render a colored quad to the screen, requires a proper OpenGL context */
+void graphics_render_colored_quad(float x, float y, float w, float h, const uint8_t *color, uint8_t *alpha)
 {
 	glPushMatrix(); /* Save the matrix so other stuff doesn't get messed up */
 	
 	glTranslatef(x, y, 0.0f); /* Move to the proper position */
-	glScalef(BLOCKSIZE, BLOCKSIZE, 0.0f); /* set size (in pixels because of gluOrtho2d) */
+	glScalef(w, h, 0.0f); /* set size (in pixels because of gluOrtho2d) */
 
-	if(ghost)
-		glColor4ub(color[0], color[1], color[2], GHOSTTRANS); 
+	/* Make sure we're drawing in the proper color, draw with an alpha channel and blend, if one is specified */
+	if(alpha != NULL)
+		glColor4ub(color[0], color[1], color[2], *alpha);
 	else
-		glColor3ubv(color); /* Make sure we're drawing in the proper color */
+		glColor3ubv(color);
 
 	glEnable(GL_BLEND);
 	
-	/* Render our block with GL_QUADS */
+	/* Render our quad with GL_QUADS */
 	glBegin(GL_QUADS);
 	glVertex2i(0, 0);
 	glVertex2i(1, 0);
@@ -88,6 +89,17 @@ void graphics_render_block(float x, float y, const uint8_t* color, bool ghost)
 	glDisable(GL_BLEND);
 
 	glPopMatrix(); /* Restore the matrix we saved previously */
+}
+
+/* Render a block in an arbitrary location on the screen, must be called within a proper OpenGL context */
+void graphics_render_block(float x, float y, const uint8_t* color, bool ghost)
+{
+	uint8_t alpha = GHOSTTRANS;
+
+	if(ghost)
+		graphics_render_colored_quad(x, y, BLOCKSIZE, BLOCKSIZE, color, &alpha);
+	else
+		graphics_render_colored_quad(x, y, BLOCKSIZE, BLOCKSIZE, color, NULL);
 }
 
 /* Must be called within a proper OpenGL context, renders a block in a grid of blocks (as in g_blockgrid) */
