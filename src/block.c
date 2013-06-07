@@ -258,7 +258,7 @@ int check_collisions(int inx, int iny, unsigned int inrot)
 				r |= COLLISION_FLOOR;
 			
 			/* Check collision with a placed block */
-			if(g_blockgrid[x][y] != 0)
+			if((y < GRIDSZY) && (x < GRIDSZX) && g_blockgrid[x][y] != 0)
 				r |= COLLISION_BLOCK;			
 			
 			if(y > GRIDSZY-3)
