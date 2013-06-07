@@ -447,33 +447,31 @@ void do_movement(void)
 	}
 }
 
-/* Make sure the player piece isn't in the wall or the _in_ floor (touching the floor is fine) */
-void fix_position(void)
+void set_rotation(int rotation)
 {
 	int c;
+	int x, y;
+	
+	x = g_player.x;
+	y = g_player.y;
 
-	c = check_collisions(g_player.x, g_player.y, g_player.rotation);
-	if(c != NO_COLLISION && c != TOUCHING_FLOOR && c != COLLISION_CEILING){
+	/* Get new coordinates with the given rotation that aren't in the wall or the floor */
+	for(c = check_collisions(x, y, rotation); (c & COLLISION_RWALL) || (c & COLLISION_LWALL) || (c & COLLISION_FLOOR); c = check_collisions(x, y, rotation))
+	{
 		if(c & COLLISION_RWALL)
-			g_player.x -= 1;
+			x -= 1;
 		if(c & COLLISION_LWALL)
-			g_player.x += 1;
+			x += 1;
 		if(c & COLLISION_FLOOR)
-			g_player.y += 1;
-		fix_position();		
+			y += 1;
 	}
-}
 
-/* Check whether the rotation is valid (if there are no unacceptable collisions) */
-bool check_rotation(int rotation)
-{
-	int c;
-
-	c = check_collisions(g_player.x, g_player.y, rotation);
-	if(c != NO_COLLISION && c != TOUCHING_FLOOR && c != COLLISION_CEILING && c != COLLISION_RWALL && c != COLLISION_LWALL)
-		return false;
-
-	return true;
+	/* If the coordinates are also not colliding with any blocks, they are valid, so set them */
+	if(!(c & COLLISION_BLOCK)){
+		g_player.x = x;
+		g_player.y = y;
+		g_player.rotation = rotation;
+	}
 }
 
 /* Rotate our player piece if g_player.rotate is set, and rotating is valid */
@@ -488,16 +486,14 @@ void do_rotation(void)
 	case RIGHT:
 	{
 		r = (g_player.rotation == 3) ? 0 : g_player.rotation + 1;
-		g_player.rotation = (check_rotation(r)) ? r : g_player.rotation;
-		fix_position();
+		set_rotation(r);
 		g_player.rotate = NONE;
 		break;
 	}
 	case LEFT:
 	{
 		r = (g_player.rotation == 0) ? 3 : g_player.rotation - 1;
-		g_player.rotation = (check_rotation(r)) ? r : g_player.rotation;
-		fix_position();
+		set_rotation(r);
 		g_player.rotate = NONE;
 		break;
 	}
