@@ -389,6 +389,25 @@ void handle_clearance(void)
 	}	
 }
 
+/* Check if the game should be reset (if all the blocks of the player piece are in the ceiling) */
+bool needs_reset(void)
+{
+	int	i, j;
+	int	c;
+
+	for(i = 0; i < PBLOCKMAX; i++)
+	{
+		for(j = 0; j < PBLOCKMAX; j++)
+		{
+			c = check_piece_block_collision(g_player.x, g_player.y, i, j, g_player.type, g_player.rotation);
+			if(!(c & COLLISION_CEILING))
+				return false;
+		}
+	}
+
+	return true;
+}
+
 void do_reset(void)
 {
 	clear_rows(GRIDSZY-1, 0);
@@ -401,7 +420,7 @@ void do_reset(void)
 /* Make sure we can set the piece, then set it, or reset the game */
 void handle_placement(void)
 {
-	if(check_collisions(g_player.x, g_player.y, g_player.rotation) & COLLISION_CEILING){
+	if(needs_reset()){
 		do_reset();
 		return;
 	}
@@ -551,4 +570,7 @@ void spawn_piece(unsigned int id)
 	g_player.move	  = NONE;
 	g_player.snap	  = false;
 	g_player.piece	  = block_pointer_from_type(g_player.type);
+
+	if(check_collisions(g_player.x, g_player.y, g_player.rotation) & COLLISION_BLOCK)
+		do_reset();
 }
