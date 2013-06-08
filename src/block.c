@@ -215,54 +215,68 @@ piece_ptr_t block_pointer_from_type(int type)
 	return r;
 }
 
-/* Check for collisions, returning NO_COLLISION if none have been found */
+/* Check collisions with the single block which is part of a piece */
+int check_piece_block_collision(int px, int py, int bx, int by, int type, int rot)
+{
+	int		x, y;
+	int		b;
+	piece_ptr_t	ptr;
+	int		r;
+
+	x   = px + bx;
+	y   = py + by;
+	ptr = block_pointer_from_type(type);
+	b   = get_block(bx, by, rot, type, ptr);
+	r   = NO_COLLISION;
+
+	/* Don't bother when there's no block */
+	if(b == 0)
+		return NO_COLLISION;
+
+	/* Check collision with the walls */
+	if(x > (GRIDSZX - 1))
+		r |= COLLISION_RWALL;
+	else  if(x < 0)
+		r |= COLLISION_LWALL;
+
+	/* Check if it's touching the floor (but has not gone past it) */
+	if(y == 0)
+		r |= TOUCHING_FLOOR;
+	
+	/* Check collision with the floor */
+	if(y < 0)
+		r |= COLLISION_FLOOR;
+	
+	/* Check collision with a placed block */
+	if((y < GRIDSZY) && (x < GRIDSZX) && g_blockgrid[x][y] != 0)
+		r |= COLLISION_BLOCK;			
+	
+	/* Check if the block is above the ceiling (-1 for being zero indexed and -2 for the 2 rows above the ceiling */
+	if(y > GRIDSZY-3)
+		r |= COLLISION_CEILING;
+	
+	return r;
+}
+
+/* Check for collisions with every block in the player's piece, returning NO_COLLISION if none have been found */
 int check_collisions(int inx, int iny, unsigned int inrot)
 {
 	int	i, j;
-	int	x, y;
 	int	max; 
 	int	b;
 	int	r;
-	bool	isatype;
 
 	if(g_player.type == NULL_PIECE)
 		return NO_COLLISION;	
-
-	isatype = (g_player.type == I_PIECE || g_player.type == O_PIECE);/* If it's a type a piece pointer or not */
-	max = isatype ? 4 : 3;/* the max size will be 4 or 3 depending on whether it's a 4x4 (a type) or 3x3 (b type) */
-	r = NO_COLLISION;
+	
+	max = get_piece_size(g_player.type);
+	r   = NO_COLLISION;
 
 	for(i = 0; i < max; i++)
 	{
-		x = i + inx;
-
 		for(j = 0; j < max; j++)
 		{
-			y = j + iny;
-						
-			b = (isatype) ? (*g_player.piece.a)[inrot][j][i] : (*g_player.piece.b)[inrot][j][i];
-			if(b == 0)/* Don't bother checking when it's null block */
-				continue;
-
-			/* Check collision with the wall on the x axis (right and left walls) */
-			if(x > (GRIDSZX - 1))
-				r |= COLLISION_RWALL;
-			else  if(x < 0)
-				r |= COLLISION_LWALL;
-
-			if(y == 0)
-				r |= TOUCHING_FLOOR;
-			
-			/* Check collision with the floor */
-			if(y < 0)
-				r |= COLLISION_FLOOR;
-			
-			/* Check collision with a placed block */
-			if((y < GRIDSZY) && (x < GRIDSZX) && g_blockgrid[x][y] != 0)
-				r |= COLLISION_BLOCK;			
-			
-			if(y > GRIDSZY-3)
-				r |= COLLISION_CEILING;
+			r |= check_piece_block_collision(inx, iny, i, j, g_player.type, inrot);
 		}
 	}
 	return r;
@@ -364,7 +378,7 @@ void handle_clearance(void)
 	unsigned int		r;
 	unsigned short int	max, min;
 
-	r = check_rows();
+	r   = check_rows();
 	max = (r >> 16);
 	min = r & 0xFFFF;
 
@@ -449,8 +463,8 @@ void do_movement(void)
 
 void set_rotation(int rotation)
 {
-	int c;
-	int x, y;
+	int	c;
+	int	x, y;
 	
 	x = g_player.x;
 	y = g_player.y;
@@ -468,8 +482,8 @@ void set_rotation(int rotation)
 
 	/* If the coordinates are also not colliding with any blocks, they are valid, so set them */
 	if(!(c & COLLISION_BLOCK)){
-		g_player.x = x;
-		g_player.y = y;
+		g_player.x	  = x;
+		g_player.y	  = y;
 		g_player.rotation = rotation;
 	}
 }
@@ -530,11 +544,11 @@ void handle_blocks(void)
 void spawn_piece(unsigned int id)
 {
 	g_player.rotation = 0;
-	g_player.type = id;
-	g_player.x = 4;
-	g_player.y = 20;
-	g_player.rotate = NONE;
-	g_player.move = NONE;
-	g_player.snap = false;
-	g_player.piece = block_pointer_from_type(g_player.type);
+	g_player.type	  = id;
+	g_player.x	  = 4;
+	g_player.y	  = 20;
+	g_player.rotate	  = NONE;
+	g_player.move	  = NONE;
+	g_player.snap	  = false;
+	g_player.piece	  = block_pointer_from_type(g_player.type);
 }
