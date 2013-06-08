@@ -26,7 +26,7 @@ Notes:
 
 * Each block is therefore 24x24
 
-TODO (now in order of priority):
+TODO:
 --------------------------------
 
 * Rotation - DONE!
@@ -34,6 +34,8 @@ TODO (now in order of priority):
 * Row clearance - DONE!
 * Game reset on failure (no more room) - DONE!.
 * Levels/speed changes - DONE!
+* "Non-locking soft drop"
+* "Hold" function
 * scoring
 * Side menu
 * background?
