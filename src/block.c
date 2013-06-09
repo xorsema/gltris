@@ -390,7 +390,7 @@ void handle_clearance(void)
 }
 
 /* Check if the game should be reset (if all the blocks of the player piece are in the ceiling) */
-bool needs_reset(void)
+bool check_gameover(void)
 {
 	int	i, j;
 	int	c;
@@ -410,7 +410,6 @@ bool needs_reset(void)
 
 void do_reset(void)
 {
-	clear_rows(GRIDSZY-1, 0);
 	spawn_piece(get_piece());
 	g_game.level = 0;
 	g_game.rows_cleared = 0;
@@ -420,8 +419,9 @@ void do_reset(void)
 /* Make sure we can set the piece, then set it, or reset the game */
 void handle_placement(void)
 {
-	if(needs_reset()){
-		do_reset();
+	if(check_gameover()){
+		clear_rows(GRIDSZY-1, 0);
+		g_game.gamestate = STATE_GAMEOVER;
 		return;
 	}
 	set_piece();
@@ -552,11 +552,11 @@ void get_ghost_info(int *ox, int *oy)
 /* Take care of piece/block mechanics */
 void handle_blocks(void)
 {
+	if(g_player.type == NULL_PIECE)
+		spawn_piece(get_piece());
+
 	do_movement();
 	do_rotation();
-
-	if(g_player.type == NULL_PIECE)
-		spawn_piece(get_piece());		
 }
 
 /* Give the player a new piece */
@@ -571,6 +571,8 @@ void spawn_piece(unsigned int id)
 	g_player.snap	  = false;
 	g_player.piece	  = block_pointer_from_type(g_player.type);
 
-	if(check_collisions(g_player.x, g_player.y, g_player.rotation) & COLLISION_BLOCK)
-		do_reset();
+	if(check_collisions(g_player.x, g_player.y, g_player.rotation) & COLLISION_BLOCK){
+		clear_rows(GRIDSZY-1, 0);
+		g_game.gamestate = STATE_GAMEOVER;
+	}
 }

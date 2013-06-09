@@ -75,8 +75,10 @@ void gltris_loop()
 			/* graphics.c: renders the blocks */
 			graphics_render_blockgrid();
 
+			/* text.c: print info such as score, level */
 			print_game_info();
 
+			/* graphics.c: render a preview of the next piece */
 			graphics_render_piece_preview();
 
 			break;
@@ -92,6 +94,10 @@ void gltris_loop()
 			glColor3f(1.0f, 1.0f, 1.0f);
 			get_text_size(PAUSETXT, 16, &w, &h);
 			text_print((WWIDTH-w)/2, (WHEIGHT-h)/2, 16, PAUSETXT);
+
+		case STATE_GAMEOVER:
+			print_gameover_text();
+			break;
 
 		default:
 			break;

@@ -151,6 +151,9 @@ void graphics_render_ghost_piece(void)
 {
 	int x, y;
 
+	if(g_player.type == NULL_PIECE)
+		return;
+
 	get_ghost_info(&x, &y);
 	graphics_render_piece(x * BLOCKSIZE, y * BLOCKSIZE, g_player.type, g_player.rotation, true);
 }

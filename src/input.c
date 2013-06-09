@@ -98,6 +98,24 @@ void handle_input(void)
 				}
 			}
 			break;
+
+		case STATE_GAMEOVER:
+			switch(event.type)
+			{
+			case SDL_QUIT:
+				g_game.running = false;
+				break;
+			case SDL_KEYDOWN:
+				switch(event.key.keysym.sym)
+				{
+				case SDLK_RETURN:
+					g_game.gamestate = STATE_GAME;
+					do_reset();
+					break;
+				}
+			}
+			break;
+
 		}
 	}
 }

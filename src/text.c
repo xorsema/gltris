@@ -144,3 +144,18 @@ void print_game_info(void)
 	get_text_size(buf, 24, &w, &h);
 	text_print(WWIDTH-w, WHEIGHT-h-t-10, 24, buf);
 }
+
+void print_gameover_text(void)
+{
+	char buf[100];
+	unsigned int w, h, t;
+
+	sprintf(buf, SCORETXT, g_game.score);
+	get_text_size(buf, 24, &w, &h);
+	glColor3f(1.0, 1.0, 1.0);
+	text_print((WWIDTH-w)/2, (WHEIGHT-h)/2, 24, buf);
+	t = h;
+
+	get_text_size(GAMEOVERTXT, 12, &w, &h);
+	text_print((WWIDTH-w)/2, ((WHEIGHT-h-t)/2)-20, 12, GAMEOVERTXT);
+}
