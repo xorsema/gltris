@@ -94,6 +94,7 @@ void gltris_loop()
 			glColor3f(1.0f, 1.0f, 1.0f);
 			get_text_size(PAUSETXT, 16, &w, &h);
 			text_print((WWIDTH-w)/2, (WHEIGHT-h)/2, 16, PAUSETXT);
+			break;
 
 		case STATE_GAMEOVER:
 			print_gameover_text();
