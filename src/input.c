@@ -52,11 +52,16 @@ void handle_input(void)
 					case SDLK_a:
 						g_player.rotate = LEFT;
 						break;
+
+					default:
+						g_player.rotate = NONE;
+						g_player.snap = false;
+						g_player.move = NONE;
+						break;
 					}
 				}
 			}
 			break;
-
 		case STATE_MENU:
 			switch(event.type)
 			{

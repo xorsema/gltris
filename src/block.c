@@ -457,8 +457,8 @@ void do_movement(void)
 			c = check_collisions(g_player.x - 1, g_player.y, g_player.rotation);
 			if(!(c & COLLISION_BLOCK) && !(c & COLLISION_LWALL)){
 				g_player.x -= 1;
-				g_player.move = NONE;
 			}
+			g_player.move = NONE;
 		}
 
 		/* Do the same with the right */
@@ -466,8 +466,8 @@ void do_movement(void)
 			c = check_collisions(g_player.x + 1, g_player.y, g_player.rotation);
 			if(!(c & COLLISION_BLOCK) && !(c & COLLISION_RWALL)){
 				g_player.x += 1;
-				g_player.move = NONE;
 			}
+			g_player.move = NONE;
 		}
 	
 		/* Apply "gravity" to the piece, if the timer has elapsed, if the piece is as far down as possible, place it */
