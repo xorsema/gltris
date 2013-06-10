@@ -144,7 +144,7 @@ void graphics_render_piece_preview(void)
 	int p;
 	
 	p = peek_piece();
-	graphics_render_piece(WWIDTH - 4*BLOCKSIZE, WHEIGHT - 200, p, 1, false);
+	graphics_render_piece(WWIDTH - 4*BLOCKSIZE, WHEIGHT - 200, p, 2, false);
 }
 
 void graphics_render_ghost_piece(void)

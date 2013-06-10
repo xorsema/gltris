@@ -36,6 +36,6 @@ TODO:
 * Levels/speed changes - DONE!
 * "Non-locking soft drop"
 * "Hold" function
-* scoring
+* scoring - DONE!
 * Side menu
 * background?

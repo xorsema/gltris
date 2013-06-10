@@ -413,6 +413,7 @@ void do_reset(void)
 	spawn_piece(get_piece());
 	g_game.level = 0;
 	g_game.rows_cleared = 0;
+	g_game.score = 0;
 	modify_timer(g_fall_timer, STARTINGTIME);
 }
 

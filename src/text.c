@@ -135,14 +135,21 @@ void print_game_info(void)
 	unsigned int w, h, t;
 
 	sprintf(buf, "Level %i", g_game.level);
-	get_text_size(buf, 24, &w, &h);
+	get_text_size(buf, 18, &w, &h);
 	glColor3f(1.0, 1.0, 1.0);
-	text_print(WWIDTH-w, WHEIGHT-h, 24, buf);
+	text_print(WWIDTH-w, WHEIGHT-h, 18, buf);
 	t = h;
 
+	memset(buf, 0, sizeof(buf));
 	sprintf(buf, "Rows %i", g_game.rows_cleared);
-	get_text_size(buf, 24, &w, &h);
-	text_print(WWIDTH-w, WHEIGHT-h-t-10, 24, buf);
+	get_text_size(buf, 18, &w, &h);
+	text_print(WWIDTH-w, WHEIGHT-h-t-10, 18, buf);
+	t += h;
+
+	memset(buf, 0, sizeof(buf));
+	sprintf(buf, "Score %i", g_game.score);
+	get_text_size(buf, 18, &w, &h);
+	text_print(WWIDTH-w, WHEIGHT-h-t-20, 18, buf);
 }
 
 void print_gameover_text(void)
