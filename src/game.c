@@ -63,4 +63,24 @@ void handle_scoring(uint32_t cleared)
 {
 	g_game.rows_cleared += cleared;
 	g_game.level = g_game.rows_cleared / ROWSPERLEVEL;
+
+	switch(cleared)
+	{
+	case 1:
+		g_game.score += 100 * g_game.level;
+		break;
+
+	case 2:
+		g_game.score += 300 * g_game.level;
+		break;
+
+	case 3:
+		g_game.score += 500 * g_game.level;
+		break;
+		
+	case 4:
+		g_game.score += 800 * g_game.level;
+		break;
+		
+	}
 }
