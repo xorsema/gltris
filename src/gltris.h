@@ -7,13 +7,12 @@
 #define SCORETXT "Your score was %i"
 #define GAMEOVERTXT "Press ENTER for a new game"
 
-enum
-{
-	STATE_GAME,
-	STATE_MENU,
-	STATE_SPLASH,
-	STATE_PAUSE,
-	STATE_GAMEOVER
+enum{
+  STATE_GAME,
+  STATE_MENU,
+  STATE_SPLASH,
+  STATE_PAUSE,
+  STATE_GAMEOVER
 };
 
 #endif
